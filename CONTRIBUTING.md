@@ -26,3 +26,8 @@ HTML + CSS + JavaScript vanilla. No hay build ni dependencias.
 - Tests.
 
 ¿Dudas o ideas grandes? Abrí un **Issue** primero para charlarlo.
+
+## OpenSpec
+
+Para features o cambios no triviales, usamos [OpenSpec](https://github.com/Fission-AI/OpenSpec):
+proponé el cambio (`/opsx:propose "tu idea"`) y abrí el PR con la spec + la implementación.

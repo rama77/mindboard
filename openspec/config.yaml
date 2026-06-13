@@ -1,0 +1,12 @@
+schema: spec-driven
+
+context: |
+  mindboard es un tablero kanban en UN SOLO archivo `index.html`: HTML + CSS + JavaScript
+  vanilla. Sin build, sin frameworks, sin dependencias, sin CDN. Funciona offline (file://).
+  Los datos del usuario viven en localStorage, nunca dentro del HTML. Colores por tokens
+  CSS semánticos (no hardcodear). Cambios por Pull Request (main protegida). Ver AGENTS.md.
+
+# Reglas por artefacto (opcional). Ejemplo:
+#   rules:
+#     proposal:
+#       - Incluir siempre una sección "Non-goals"
