@@ -8,7 +8,17 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ## [No publicado]
 
-_(Próximos cambios van acá.)_
+### Agregado
+
+- **Compartir desde cada sección de la tarjeta.** Botón de compartir (mismo ícono y lugar)
+  en Editar, Mapa mental, Ítems y Pizarra:
+  - *Editar*: genera un **resumen de la tarjeta** en texto (título, tablero, estado,
+    prioridad, responsable, vencimiento, etiquetas, descripción y checklist) a partir de
+    lo que tengas en el formulario, incluso sin guardar.
+  - *Mapa mental* e *Ítems*: comparten su contenido como texto.
+  - El modal de compartir ahora ofrece **Copiar**, **WhatsApp** (abre `wa.me` con el texto)
+    y **Mail** (abre el cliente con `mailto:`, asunto = primera línea).
+  - *Pizarra*: comparte descargando la imagen `.png` para adjuntar.
 
 ## [1.0.0] - 2026-06-14
 

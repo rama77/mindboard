@@ -547,7 +547,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <!-- Modal compartir lista -->
 <div class="ap-overlay" id="overlayShare">
   <div class="ap-modal" role="dialog" aria-modal="true">
-    <h3>Copiar lista</h3>
+    <h3 id="shareTitle">Copiar lista</h3>
     <p class="ap-subtitle" style="margin:0" id="shareInfo">Lista de las tareas que estás viendo (según los filtros activos). Quien la reciba la pega en <strong>Pegar lista</strong> y le entran como tareas.</p>
     <div class="ap-field">
       <label for="shareText">Lista</label>
@@ -555,7 +555,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     </div>
     <div class="ap-modal-actions">
       <button class="ap-btn ghost" id="btnShareClose">Cerrar</button>
-      <button class="ap-btn" id="btnShareCopy">Copiar al portapapeles</button>
+      <button class="ap-btn ghost" id="btnShareWapp" type="button">WhatsApp</button>
+      <button class="ap-btn ghost" id="btnShareMail" type="button">Mail</button>
+      <button class="ap-btn" id="btnShareCopy">Copiar</button>
     </div>
   </div>
 </div>
@@ -572,7 +574,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         </h3>
         <div id="snSlotWB"></div>
       </div>
-      <button class="ap-icon-btn" id="btnWBExport" title="Descargar la pizarra como imagen (.png)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
+      <button class="ap-icon-btn" id="btnWBExport" title="Compartir la pizarra: descarga la imagen (.png) para adjuntar" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
       <button class="ap-icon-btn" id="btnWBClose" title="Cerrar" style="padding:.45rem">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -633,7 +635,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         </h3>
         <div id="snSlotMind"></div>
       </div>
-      <button class="ap-icon-btn" id="btnMindExport" title="Exportar el mapa como texto (.txt)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
+      <button class="ap-icon-btn" id="btnMindExport" title="Compartir el mapa (texto: copiar, WhatsApp o mail)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
       <button class="ap-icon-btn" id="btnMindClose" title="Cerrar" style="padding:.45rem">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -655,7 +657,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         </h3>
         <div id="snSlotChk"></div>
       </div>
-      <button class="ap-icon-btn" id="btnChkExport" title="Exportar los ítems como texto (.txt)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
+      <button class="ap-icon-btn" id="btnChkExport" title="Compartir los ítems (texto: copiar, WhatsApp o mail)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
       <button class="ap-icon-btn" id="btnChkClose" title="Cerrar" style="padding:.45rem">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -694,8 +696,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   <div class="ap-modal" role="dialog" aria-modal="true">
     <div id="recentsBar" class="recents-bar"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-      <h3 id="modalTitle">Nueva tarea</h3>
-      <div id="snSlotEdit"></div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <h3 id="modalTitle">Nueva tarea</h3>
+        <div id="snSlotEdit"></div>
+      </div>
+      <button class="ap-icon-btn" id="btnShareCard" type="button" title="Compartir el resumen de la tarjeta" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
     </div>
     <input type="hidden" id="fId">
     <div class="ap-field">
@@ -1686,7 +1691,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     });
   }
   function slugTitle(t){ var x=(t||"tarjeta").toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi,"-").replace(/^-+|-+$/g,""); return x.slice(0,40)||"tarjeta"; }
-  function showSharable(info, text){
+  function showSharable(info, text, title){
+    $("shareTitle").textContent = title || "Compartir";
     $("shareInfo").innerHTML = info;
     $("shareText").value = text;
     $("overlayShare").classList.add("open");
@@ -1700,7 +1706,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     if(!mindTask) return;
     var lines = ["# " + (mindTask.title||"Mapa mental"), ""];
     (function walk(nodes, depth){ (nodes||[]).forEach(function(n){ lines.push(new Array(depth+1).join("  ") + "- " + (n.text||"")); walk(n.children, depth+1); }); })(mindTask.mind, 0);
-    showSharable("Texto del mapa mental — editá lo que quieras y copialo para compartir.", lines.join("\n"));
+    showSharable("Texto del mapa mental — editá lo que quieras y copialo para compartir.", lines.join("\n"), "Texto del mapa mental");
   }
   function exportChecklistText(){
     if(!chkModalTask) return;
@@ -1713,7 +1719,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       if(it.due) extra.push("vence " + it.due);
       lines.push("- [" + (it.done?"x":" ") + "] " + (it.text||"") + (extra.length ? "  (" + extra.join(", ") + ")" : ""));
     });
-    showSharable("Texto de los ítems — editá lo que quieras y copialo para compartir.", lines.join("\n"));
+    showSharable("Texto de los ítems — editá lo que quieras y copialo para compartir.", lines.join("\n"), "Texto de los ítems");
   }
   function exportWBImage(){
     var svg = $("wbSvg"); if(!svg || !wbTask) return;
@@ -1920,6 +1926,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   }
   function openShare(){
     var lines = filteredVisibleTasks().map(function(t){ return "- "+t.title+(t.url?" "+t.url:""); });
+    $("shareTitle").textContent = "Copiar lista";
     $("shareText").value = lines.join("\n");
     $("shareInfo").innerHTML = lines.length
       ? 'Lista de las '+lines.length+' tarea(s) que estás viendo (según los filtros activos). Quien la reciba la pega en <strong>Pegar lista</strong> y le entran como tareas.'
@@ -1934,6 +1941,48 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       navigator.clipboard.writeText(ta.value).then(done, function(){ try{ document.execCommand("copy"); done(); }catch(e){} });
     } else { try{ document.execCommand("copy"); done(); }catch(e){} }
   }
+  // Texto del select por su opción seleccionada (label legible, no el id).
+  function selText(sel){ var o = sel.options[sel.selectedIndex]; return o ? o.textContent.trim() : ""; }
+  // Resumen legible de la tarjeta a partir de los valores ACTUALES del editor
+  // (incluye lo que tengas sin guardar). Pensado para pegar en WhatsApp o mail.
+  function buildCardSummary(){
+    var title = $("fTitle").value.trim() || "(sin título)";
+    var board = selText($("fBoard")), state = selText($("fState"));
+    var prio = PRIO_LABEL[$("fPrio").value] || $("fPrio").value;
+    var person = $("fPerson").value ? selText($("fPerson")) : "";
+    var due = $("fDue").value;
+    var tags = $("fTags").value.split(",").map(function(x){ return x.trim(); }).filter(Boolean);
+    var desc = $("fDesc").value.trim();
+    var url = $("fUrl").value.trim();
+    var L = ["*" + title + "*", ""];
+    var m1 = []; if(board) m1.push("Tablero: " + board); if(state) m1.push("Estado: " + state);
+    if(m1.length) L.push(m1.join("  ·  "));
+    var m2 = ["Prioridad: " + prio]; if(person) m2.push("Responsable: " + person);
+    L.push(m2.join("  ·  "));
+    if(due) L.push("Vence: " + due);
+    if(tags.length) L.push("Etiquetas: " + tags.join(", "));
+    if(desc){ L.push("", "Descripción:", desc); }
+    var done = modalChk.filter(function(i){ return i.done; }).length, tot = modalChk.length;
+    if(tot){
+      L.push("", "Checklist (" + done + "/" + tot + "):");
+      modalChk.forEach(function(it){
+        var who = ""; if(it.assignee){ var p = personById(it.assignee); if(p) who = "  @" + p.name; }
+        L.push((it.done ? "✅" : "⬜") + " " + (it.text||"").trim() + who);
+      });
+    }
+    if(url){ L.push("", "🔗 " + url); }
+    return L.join("\n");
+  }
+  function shareCardSummary(){
+    showSharable("Resumen de la tarjeta. Editá lo que quieras y copialo, o mandalo por WhatsApp o mail.", buildCardSummary(), "Compartir resumen");
+  }
+  function shareSubject(){
+    var lines = $("shareText").value.split("\n"), first = "";
+    for(var i=0;i<lines.length;i++){ if(lines[i].trim()){ first = lines[i]; break; } }
+    return (first.replace(/^[*#\-\s]+/, "").replace(/\*+$/, "").trim().slice(0,120)) || "mindboard";
+  }
+  function shareViaWhatsApp(){ window.open("https://wa.me/?text=" + encodeURIComponent($("shareText").value), "_blank"); }
+  function shareViaMail(){ window.location.href = "mailto:?subject=" + encodeURIComponent(shareSubject()) + "&body=" + encodeURIComponent($("shareText").value); }
 
   // ---- Mapa mental ----
   var mindTask = null;   // tarea en edición
@@ -2524,6 +2573,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   $("btnShare").addEventListener("click", openShare);
   $("btnShareCopy").addEventListener("click", copyShare);
   $("btnShareClose").addEventListener("click", closeShare);
+  $("btnShareWapp").addEventListener("click", shareViaWhatsApp);
+  $("btnShareMail").addEventListener("click", shareViaMail);
+  $("btnShareCard").addEventListener("click", shareCardSummary);
   $("overlayShare").addEventListener("click", function(e){ if(e.target===$("overlayShare")) closeShare(); });
 
   $("btnPersonAddSide").addEventListener("click", function(){ peopleAddOpen = !peopleAddOpen; render(); });
