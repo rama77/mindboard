@@ -638,7 +638,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
-    <p class="ap-subtitle" style="margin:0">Click en el texto para editar · <strong>Enter</strong>: nueva idea · <strong>Tab</strong>: sub-idea · Enter en vacío la borra. Arrastrá para reordenar.</p>
+    <p class="ap-subtitle" style="margin:0">Click en el texto para editar · <strong>Enter</strong>: nueva idea · <strong>Tab</strong>: sub-idea · Enter en vacío la borra · <strong>pegá una lista</strong> y se arma sola (la sangría anida). Arrastrá para reordenar.</p>
     <div class="mm-canvas"><div class="mm" id="mindCanvas"></div></div>
   </div>
 </div>
@@ -2017,6 +2017,24 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
           mindEditId = null; saveTasks(); renderMind();
         }
       });
+      inp.addEventListener("paste", function(e){
+        var txt = (e.clipboardData || window.clipboardData) ? (e.clipboardData || window.clipboardData).getData("text") : "";
+        if(!txt || txt.indexOf("\n") < 0) return; // una sola línea: pegado normal
+        var roots = parseMindList(txt);
+        if(!roots.length) return;
+        e.preventDefault(); if(done) return; done = true;
+        var idx = siblings.indexOf(node);
+        if(inp.value.trim() === ""){
+          // el nodo en edición está vacío: lo reemplazo por la lista
+          if(idx >= 0) Array.prototype.splice.apply(siblings, [idx, 1].concat(roots));
+          else Array.prototype.push.apply(siblings, roots);
+        } else {
+          node.text = inp.value.trim();
+          if(idx >= 0) Array.prototype.splice.apply(siblings, [idx+1, 0].concat(roots));
+          else Array.prototype.push.apply(siblings, roots);
+        }
+        mindEditId = null; saveTasks(); renderMind();
+      });
       inp.addEventListener("blur", finishEdit);
       box.appendChild(inp);
       setTimeout(function(){ inp.focus(); inp.select(); }, 10);
@@ -2040,10 +2058,32 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   }
   function addMindChild(node){
     if(!node.children) node.children = [];
-    var n = { id: uid("m_"), text: "Nuevo", children: [] };
+    var n = { id: uid("m_"), text: "", children: [] };
     node.children.push(n);
     mindEditId = n.id;
     saveTasks(); renderMind();
+  }
+  // Parsea un texto multilínea pegado en una lista de nodos del mapa.
+  // Respeta la sangría (tabs / espacios) para anidar y limpia bullets (- * • 1.).
+  // Es el inverso del export (que escribe "- idea" con 2 espacios por nivel).
+  function parseMindList(text){
+    var lines = String(text).replace(/\r\n?/g, "\n").split("\n");
+    var items = [];
+    lines.forEach(function(raw){
+      if(!raw.trim()) return;
+      var ws = (raw.match(/^[ \t]*/)[0]).replace(/\t/g, "  ");
+      var t = raw.trim().replace(/^([-*•]|\d+[.)])\s+/, "").trim();
+      if(t) items.push({ indent: ws.length, text: t.slice(0, 120) });
+    });
+    var roots = [], stack = [];
+    items.forEach(function(it){
+      var node = { id: uid("m_"), text: it.text, children: [] };
+      while(stack.length && stack[stack.length-1].indent >= it.indent) stack.pop();
+      if(stack.length) stack[stack.length-1].node.children.push(node);
+      else roots.push(node);
+      stack.push({ indent: it.indent, node: node });
+    });
+    return roots;
   }
   function nodeIsCreated(node){
     if(!mindTask || !Array.isArray(mindTask.checklist)) return false;
