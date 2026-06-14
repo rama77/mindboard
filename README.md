@@ -22,6 +22,8 @@ O serví la carpeta con cualquier server estático / GitHub Pages.
 - **Pizarra** por tarjeta: cuadros, textos, imágenes y conexiones; exportás a PNG.
 - **Vista por persona** para ver la carga de cada uno y reasignar rápido.
 - **Borrador rápido** para reuniones: lo usás y al final decidís si lo guardás o lo tirás.
+- **Compartir** desde cada sección: resumen de la tarjeta, mapa o ítems como texto
+  (copiar, WhatsApp o mail) y la pizarra como imagen.
 - **Búsqueda y filtros**, archivar y tema claro/oscuro.
 - **Backup**: exportás/importás todo en JSON.
 
