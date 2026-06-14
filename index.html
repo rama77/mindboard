@@ -107,6 +107,33 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .ap-viewtoggle .ap-btn:hover{color:var(--foreground)}
 .ap-viewtoggle .ap-btn.active{background:var(--card);color:var(--foreground);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .ap-items-view{display:flex;flex-direction:column;gap:1rem}
+.ap-cal{display:flex;flex-direction:column;gap:.8rem}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.cal-nav{display:inline-flex;gap:.3rem}
+.cal-nav .ap-btn{padding:.35rem .7rem;line-height:1}
+.cal-title{font-weight:700;font-size:1rem;color:var(--foreground)}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem}
+.cal-dow-cell{font-size:.72rem;font-weight:600;color:var(--muted-foreground);text-align:center;padding:.2rem 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem}
+.cal-cell{min-height:6.2rem;max-height:11rem;display:flex;flex-direction:column;gap:.25rem;background:var(--card);border:1px solid var(--border);border-radius:.6rem;padding:.35rem;overflow:hidden}
+.cal-cell.other-month{opacity:.45}
+.cal-cell.today{border-color:var(--warning);box-shadow:inset 0 0 0 1px var(--warning)}
+.cal-cell.cal-drop{border-color:var(--brand-teal);background:color-mix(in srgb,var(--brand-teal) 12%,var(--card))}
+.cal-daynum{font-size:.72rem;font-weight:600;color:var(--muted-foreground);flex:0 0 auto}
+.cal-cell.today .cal-daynum{color:var(--warning)}
+.cal-cell-items{display:flex;flex-direction:column;gap:.25rem;overflow-y:auto}
+.cal-chip{font-size:.72rem;padding:.22rem .4rem;border-radius:.4rem;background:var(--muted);color:var(--foreground);cursor:pointer;border-left:3px solid var(--muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-chip:hover{background:color-mix(in srgb,var(--foreground) 8%,var(--muted))}
+.cal-chip.dragging{opacity:.5}
+.cal-chip.prio-alta{border-left-color:var(--danger)}
+.cal-chip.prio-media{border-left-color:var(--warning)}
+.cal-chip.prio-baja{border-left-color:var(--info)}
+.cal-chip.over .cal-chip-title{color:var(--danger)}
+.cal-nodate{background:var(--card);border:1px solid var(--border);border-radius:.6rem;padding:.5rem .7rem}
+.cal-nodate-head{font-size:.78rem;font-weight:600;color:var(--muted-foreground);margin-bottom:.4rem}
+.cal-nodate-items{display:flex;flex-wrap:wrap;gap:.4rem}
+.cal-nodate-items .cal-chip{flex:0 0 auto;max-width:14rem}
+.cal-empty{font-size:.78rem;color:var(--muted-foreground)}
 .iv-group{border:1px solid var(--border);border-radius:.9rem;background:var(--card);overflow:hidden}
 .iv-head{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:color-mix(in srgb,var(--muted) 30%,transparent);border-bottom:1px solid var(--border)}
 .iv-name{font-size:.9rem;font-weight:700}
@@ -417,6 +444,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         <div class="ap-viewtoggle">
           <button class="ap-btn active" id="btnViewCards">Tarjetas</button>
           <button class="ap-btn" id="btnViewItems">Ítems</button>
+          <button class="ap-btn" id="btnViewCal">Calendario</button>
         </div>
         <select class="ap-select" id="filterPrio">
           <option value="">Todas las prioridades</option>
@@ -450,6 +478,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
       <div class="ap-board" id="board"></div>
       <div class="ap-items-view" id="itemsView" style="display:none"></div>
+      <div class="ap-cal" id="calView" style="display:none"></div>
     </div>
   </main>
 </div>
@@ -776,6 +805,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   var SIDEBAR_KEY = "mindboardSidebar.v1";
   var BACKUP_KEY  = "mindboardBackup.v1";  // {last, snooze} en ms
   var RECENT_KEY  = "mindboardRecientes.v1";  // ids de tarjetas recientes
+  var VIEW_KEY    = "mindboardVista.v1";   // 'cards' | 'items' | 'cal'
+  var CAL_KEY     = "mindboardCal.v1";     // {mode:'month'|'week', anchor:'YYYY-MM-DD'}
 
   var DEFAULT_COLUMNS = [
     {id:"pendiente",  label:"Pendiente",  color:"var(--muted-foreground)"},
@@ -1180,11 +1211,118 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     });
     if(!any) v.appendChild(el("div","ap-side-empty","No hay tarjetas ni ítems para mostrar."));
   }
+
+  // ---- Vista Calendario ----
+  var MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var WEEKDAYS = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  var calDragId = null;      // id de tarjeta arrastrada en el calendario
+  var calDragMoved = false;  // hubo arrastre (para no abrir el editor en el click final)
+
+  function ymd(d){ var m=d.getMonth()+1, day=d.getDate(); return d.getFullYear()+"-"+(m<10?"0"+m:m)+"-"+(day<10?"0"+day:day); }
+  function parseYmd(s){ var p=String(s).split("-"); return new Date(+p[0], (+p[1])-1, +p[2]); }
+  function addDays(d, n){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()+n); }
+  function addMonths(d, n){ return new Date(d.getFullYear(), d.getMonth()+n, 1); }
+  function startOfWeek(d){ var dow=(d.getDay()+6)%7; return addDays(d, -dow); }  // lunes
+  function saveCal(){ write(CAL_KEY, {mode:calMode, anchor:calAnchor}); }
+  function daysForView(anchorStr, mode){
+    var anchor = parseYmd(anchorStr), days = [];
+    if(mode==='week'){
+      var s = startOfWeek(anchor);
+      for(var i=0;i<7;i++) days.push(addDays(s,i));
+    } else {
+      var first = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+      var last  = new Date(anchor.getFullYear(), anchor.getMonth()+1, 0);
+      var cur = startOfWeek(first);
+      while(cur <= last || days.length % 7 !== 0){ days.push(cur); cur = addDays(cur,1); if(days.length>42) break; }
+    }
+    return days;
+  }
+  function calVisibleTasks(){ var f = currentFilters(); return tasks.filter(function(t){ return taskInView(t) && matches(t, f); }); }
+  function calSetDue(id, dayStr){
+    var t = tasks.find(function(x){ return x.id===id; });
+    if(!t || t.due===dayStr) return;
+    t.due = dayStr; saveTasks(); renderCalendar();
+  }
+  function calChip(t){
+    var chip = el("div","cal-chip prio-"+(t.prio||"media")); chip.draggable = true; chip.dataset.id = t.id;
+    var di = dueInfo(t.due); if(di && di.cls==='over') chip.classList.add("over");
+    chip.appendChild(el("span","cal-chip-title", t.title));
+    if(t.assignee){ var p=personById(t.assignee); if(p) chip.title = t.title+" · "+p.name; }
+    chip.addEventListener("dragstart", function(ev){ ev.stopPropagation(); calDragId=t.id; calDragMoved=true; chip.classList.add("dragging"); ev.dataTransfer.effectAllowed="move"; try{ ev.dataTransfer.setData("text/plain", t.id); }catch(e){} });
+    chip.addEventListener("dragend", function(){ chip.classList.remove("dragging"); calDragId=null; setTimeout(function(){ calDragMoved=false; }, 50); });
+    chip.addEventListener("click", function(e){ if(calDragMoved) return; e.stopPropagation(); openModal(t); });
+    return chip;
+  }
+  function renderCalendar(){
+    var view = $("calView"); view.innerHTML = "";
+    var list = calVisibleTasks();
+    var byDay = {}, noDate = [];
+    list.forEach(function(t){ if(t.due){ (byDay[t.due] = byDay[t.due] || []).push(t); } else noDate.push(t); });
+    var anchor = parseYmd(calAnchor), days = daysForView(calAnchor, calMode), todayStr = ymd(new Date());
+
+    var head = el("div","cal-head");
+    var nav = el("div","cal-nav");
+    var prev = el("button","ap-btn ghost"); prev.innerHTML="‹"; prev.title="Anterior";
+    var today = el("button","ap-btn ghost","Hoy"); today.title="Ir a hoy";
+    var next = el("button","ap-btn ghost"); next.innerHTML="›"; next.title="Siguiente";
+    prev.addEventListener("click", function(){ calAnchor = ymd(calMode==='week'? addDays(anchor,-7) : addMonths(anchor,-1)); saveCal(); renderCalendar(); });
+    next.addEventListener("click", function(){ calAnchor = ymd(calMode==='week'? addDays(anchor,7) : addMonths(anchor,1)); saveCal(); renderCalendar(); });
+    today.addEventListener("click", function(){ calAnchor = ymd(new Date()); saveCal(); renderCalendar(); });
+    nav.appendChild(prev); nav.appendChild(today); nav.appendChild(next);
+
+    var title = el("div","cal-title");
+    if(calMode==='week'){
+      var ws = startOfWeek(anchor), we = addDays(ws,6);
+      title.textContent = ws.getDate()+" "+MONTHS[ws.getMonth()]+" – "+we.getDate()+" "+MONTHS[we.getMonth()]+" "+we.getFullYear();
+    } else {
+      title.textContent = MONTHS[anchor.getMonth()].charAt(0).toUpperCase()+MONTHS[anchor.getMonth()].slice(1)+" "+anchor.getFullYear();
+    }
+
+    var modes = el("div","ap-viewtoggle");
+    var mMonth = el("button","ap-btn"+(calMode==='month'?" active":""),"Mes");
+    var mWeek  = el("button","ap-btn"+(calMode==='week'?" active":""),"Semana");
+    mMonth.addEventListener("click", function(){ if(calMode==='month') return; calMode='month'; saveCal(); renderCalendar(); });
+    mWeek.addEventListener("click", function(){ if(calMode==='week') return; calMode='week'; saveCal(); renderCalendar(); });
+    modes.appendChild(mMonth); modes.appendChild(mWeek);
+
+    head.appendChild(nav); head.appendChild(title); head.appendChild(modes);
+    view.appendChild(head);
+
+    var dow = el("div","cal-dow");
+    WEEKDAYS.forEach(function(w){ dow.appendChild(el("div","cal-dow-cell", w)); });
+    view.appendChild(dow);
+
+    var grid = el("div","cal-grid");
+    days.forEach(function(d){
+      var key = ymd(d);
+      var cell = el("div","cal-cell");
+      if(calMode==='month' && d.getMonth()!==anchor.getMonth()) cell.classList.add("other-month");
+      if(key===todayStr) cell.classList.add("today");
+      cell.appendChild(el("div","cal-daynum", String(d.getDate())));
+      var items = el("div","cal-cell-items");
+      (byDay[key]||[]).forEach(function(t){ items.appendChild(calChip(t)); });
+      cell.appendChild(items);
+      cell.addEventListener("dragover", function(ev){ if(!calDragId) return; ev.preventDefault(); cell.classList.add("cal-drop"); });
+      cell.addEventListener("dragleave", function(ev){ if(!cell.contains(ev.relatedTarget)) cell.classList.remove("cal-drop"); });
+      cell.addEventListener("drop", function(ev){ if(!calDragId) return; ev.preventDefault(); cell.classList.remove("cal-drop"); calSetDue(calDragId, key); });
+      grid.appendChild(cell);
+    });
+    view.appendChild(grid);
+
+    var nd = el("div","cal-nodate");
+    nd.appendChild(el("div","cal-nodate-head","Sin fecha ("+noDate.length+")"));
+    var ndItems = el("div","cal-nodate-items");
+    if(noDate.length) noDate.forEach(function(t){ ndItems.appendChild(calChip(t)); });
+    else ndItems.appendChild(el("div","cal-empty","Todas las tarjetas visibles tienen fecha."));
+    nd.appendChild(ndItems);
+    view.appendChild(nd);
+  }
   function render(){
     refreshPersonFilter();
     renderSidebar();
-    if(viewMode==='items'){ $("board").style.display="none"; $("itemsView").style.display="flex"; renderItemsView(); return; }
-    $("itemsView").style.display="none"; $("board").style.display="flex";
+    if(viewMode==='items'){ $("board").style.display="none"; $("calView").style.display="none"; $("itemsView").style.display="flex"; renderItemsView(); return; }
+    if(viewMode==='cal'){ $("board").style.display="none"; $("itemsView").style.display="none"; $("calView").style.display="flex"; renderCalendar(); return; }
+    $("itemsView").style.display="none"; $("calView").style.display="none"; $("board").style.display="flex";
     var board = $("board"); board.innerHTML = "";
     var f = currentFilters();
     var showBoardTag = currentBoard === ALL || currentBoard === FOCUS || (searchAll && curSearch());
@@ -1986,7 +2124,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
   // ---- Mapa mental ----
   var mindTask = null;   // tarea en edición
-  var viewMode = 'cards';  // 'cards' | 'items'
+  var viewMode = (function(){ var v = read(VIEW_KEY, 'cards'); return (v==='items'||v==='cal') ? v : 'cards'; })();  // 'cards' | 'items' | 'cal'
+  var calSaved = (function(){ var c = read(CAL_KEY, null); return (c && typeof c==='object') ? c : {}; })();
+  var calMode = (calSaved.mode==='week') ? 'week' : 'month';   // 'month' | 'week'
+  var calAnchor = (typeof calSaved.anchor==='string' && /^\d{4}-\d{2}-\d{2}$/.test(calSaved.anchor)) ? calSaved.anchor : ymd(new Date()); // YYYY-MM-DD dentro del período
   var recentIds = (function(){ var r = read(RECENT_KEY, []); return Array.isArray(r) ? r : []; })();  // ids de tarjetas recientes (persistidas)
   var chkModalTask = null;  // tarea del modal de Ítems
   var scratchTask = null;        // borrador activo (oculto del tablero hasta guardarlo)
@@ -2610,8 +2751,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       if(resulting > max){ var cut = resulting - max; setTimeout(function(){ uiAlert("⚠️ Se recortó el texto pegado: superaba el límite de "+max+" caracteres del campo (se perdieron ~"+cut+"). Acortalo o dividilo en partes."); }, 0); }
     });
   });
-  $("btnViewCards").addEventListener("click", function(){ viewMode='cards'; $("btnViewCards").classList.add("active"); $("btnViewItems").classList.remove("active"); render(); });
-  $("btnViewItems").addEventListener("click", function(){ viewMode='items'; $("btnViewItems").classList.add("active"); $("btnViewCards").classList.remove("active"); render(); });
+  function setView(mode){
+    viewMode = mode; write(VIEW_KEY, mode);
+    $("btnViewCards").classList.toggle("active", mode==='cards');
+    $("btnViewItems").classList.toggle("active", mode==='items');
+    $("btnViewCal").classList.toggle("active", mode==='cal');
+    render();
+  }
+  $("btnViewCards").addEventListener("click", function(){ setView('cards'); });
+  $("btnViewItems").addEventListener("click", function(){ setView('items'); });
+  $("btnViewCal").addEventListener("click", function(){ setView('cal'); });
   $("ssSave").addEventListener("click", commitSaveScratch);
   $("ssCancel").addEventListener("click", cancelSaveScratch);
   $("ssTitle").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); commitSaveScratch(); } });
@@ -2690,6 +2839,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   // ---- Init ----
   applyTheme(localStorage.getItem(THEME_KEY) || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
   if(localStorage.getItem(SIDEBAR_KEY)==="1") setSidebar(true);
+  $("btnViewCards").classList.toggle("active", viewMode==='cards');
+  $("btnViewItems").classList.toggle("active", viewMode==='items');
+  $("btnViewCal").classList.toggle("active", viewMode==='cal');
   render();
   checkBackup();
 })();
