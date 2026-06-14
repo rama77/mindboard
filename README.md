@@ -20,6 +20,7 @@ O serví la carpeta con cualquier server estático / GitHub Pages.
 - **Tarjetas completas**: prioridad, persona, vencimiento, etiquetas y checklist con responsables.
 - **Mapa mental** por tarjeta: armás ideas, las anidás y las pasás al checklist.
 - **Pizarra** por tarjeta: cuadros, textos, imágenes y conexiones; exportás a PNG.
+- **Vista Calendario** (mes/semana): ves las tarjetas por vencimiento y arrastrás para reprogramar.
 - **Vista por persona** para ver la carga de cada uno y reasignar rápido.
 - **Borrador rápido** para reuniones: lo usás y al final decidís si lo guardás o lo tirás.
 - **Compartir** desde cada sección: resumen de la tarjeta, mapa o ítems como texto

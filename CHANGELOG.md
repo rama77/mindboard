@@ -10,6 +10,13 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ### Agregado
 
+- **Vista Calendario.** Tercera vista del tablero (junto a Tarjetas e Ítems) que ubica las
+  tarjetas por su fecha de vencimiento:
+  - Modos **Mes** y **Semana** (lunes a domingo), con navegación anterior/siguiente y **Hoy**.
+  - **Arrastrar** una tarjeta a otro día cambia su vencimiento; las tarjetas **sin fecha** se
+    listan aparte y se agendan arrastrándolas a un día. Clic en una tarjeta abre su editor.
+  - Respeta el tablero/foco y los filtros activos; recuerda vista, modo y período.
+  - Primer cambio hecho con **OpenSpec** (propuesta + spec + diseño + tareas en `openspec/`).
 - **Compartir desde cada sección de la tarjeta.** Botón de compartir (mismo ícono y lugar)
   en Editar, Mapa mental, Ítems y Pizarra:
   - *Editar*: genera un **resumen de la tarjeta** en texto (título, tablero, estado,
