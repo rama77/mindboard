@@ -16,28 +16,16 @@ O serví la carpeta con cualquier server estático / GitHub Pages.
 
 ## Qué incluye
 
-- **Tableros (temas)** en un menú lateral colapsable (a barra de iconos con tooltips),
-  reordenables con drag & drop. Vista **★ Hoy** y **Todos**.
-- **Carriles (estados)** configurables (crear, renombrar, recolorear, reordenar
-  arrastrando el encabezado). Alta de tarjetas inline al pie de cada carril.
-- **Tarjetas** con título, descripción, URL, prioridad, persona, vencimiento, etiquetas
-  y checklist. Drag & drop entre carriles y tableros.
-- **Checklist con responsables**: cada ítem con persona, prioridad y vencimiento.
-- **Secciones por tarjeta**: Editar · **Mapa mental** · **Pizarra** · Ítems.
-  - *Mapa mental*: árbol de ideas, drag & drop para reordenar/mover ramas, Enter crea la
-    siguiente idea, Tab crea una sub-idea, y podés mandar nodos al checklist.
-  - *Pizarra*: cuadros, textos e imágenes; conectás nodos arrastrando desde sus puntos;
-    duplicar/copiar/pegar; doble clic crea; exportás a PNG.
-  - Exportás el mapa y los ítems como **texto** para copiar/compartir.
-- **Vista Tarjetas / Ítems**: ítems y tarjetas **agrupados por persona** para ver la carga
-  de cada uno y reasignar rápido.
-- **Borrador rápido**: una tarjeta descartable para usar en una reunión; al cerrarla
-  decidís si la guardás (y dónde) o la descartás.
-- **Personas** administradas desde el menú, marcás cuál sos "vos" (aparecés primero al
-  asignar).
-- **Barra de tarjetas recientes** para saltar entre las que estás trabajando.
-- Búsqueda + filtros, archivar, copiar/pegar listas, **exportar/importar** backup JSON,
-  recordatorio de backup, tema claro/oscuro.
+- **Tableros y carriles** configurables, con tarjetas que arrastrás entre estados y tableros.
+- **Tarjetas completas**: prioridad, persona, vencimiento, etiquetas y checklist con responsables.
+- **Mapa mental** por tarjeta: armás ideas, las anidás y las pasás al checklist.
+- **Pizarra** por tarjeta: cuadros, textos, imágenes y conexiones; exportás a PNG.
+- **Vista por persona** para ver la carga de cada uno y reasignar rápido.
+- **Borrador rápido** para reuniones: lo usás y al final decidís si lo guardás o lo tirás.
+- **Búsqueda y filtros**, archivar y tema claro/oscuro.
+- **Backup**: exportás/importás todo en JSON.
+
+> El detalle de cada versión y novedad está en el **[CHANGELOG](CHANGELOG.md)**.
 
 ## Cómo está hecho
 
