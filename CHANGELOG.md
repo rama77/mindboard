@@ -8,7 +8,17 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ## [No publicado]
 
-_(Próximos cambios van acá.)_
+### Agregado
+
+- **Mapa mental — colapsar ramas.** Cada nodo con hijos muestra un caret para colapsar/
+  expandir su rama; colapsado indica cuántos descendientes oculta (**▸ N**). El estado se
+  recuerda y agregar un sub-ítem expande la rama automáticamente. Útil para mapas grandes.
+
+### Cambiado
+
+- **Más color en los componentes nuevos** (con tokens semánticos, respeta el dark mode):
+  nodos del mapa coloreados por nivel de rama y conectores con un toque de marca; tarjetas
+  del calendario tintadas por prioridad y día de hoy resaltado.
 
 ## [1.1.0] - 2026-06-14
 
