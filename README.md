@@ -18,7 +18,7 @@ O serví la carpeta con cualquier server estático / GitHub Pages.
 
 - **Tableros y carriles** configurables, con tarjetas que arrastrás entre estados y tableros.
 - **Tarjetas completas**: prioridad, persona, vencimiento, etiquetas y checklist con responsables.
-- **Mapa mental** por tarjeta: armás ideas, las anidás y las pasás al checklist.
+- **Mapa mental** por tarjeta: armás ideas, las anidás, colapsás ramas grandes y las pasás al checklist.
 - **Pizarra** por tarjeta: cuadros, textos, imágenes y conexiones; exportás a PNG.
 - **Vista Calendario** (mes/semana): ves las tarjetas por vencimiento y arrastrás para reprogramar.
 - **Vista por persona** para ver la carga de cada uno y reasignar rápido.

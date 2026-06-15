@@ -117,18 +117,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem}
 .cal-cell{min-height:6.2rem;max-height:11rem;display:flex;flex-direction:column;gap:.25rem;background:var(--card);border:1px solid var(--border);border-radius:.6rem;padding:.35rem;overflow:hidden}
 .cal-cell.other-month{opacity:.45}
-.cal-cell.today{border-color:var(--warning);box-shadow:inset 0 0 0 1px var(--warning)}
+.cal-cell.today{border-color:var(--warning);box-shadow:inset 0 0 0 1px var(--warning);background:color-mix(in srgb,var(--warning) 9%,var(--card))}
 .cal-cell.cal-drop{border-color:var(--brand-teal);background:color-mix(in srgb,var(--brand-teal) 12%,var(--card))}
 .cal-daynum{font-size:.72rem;font-weight:600;color:var(--muted-foreground);flex:0 0 auto}
 .cal-cell.today .cal-daynum{color:var(--warning)}
 .cal-cell-items{display:flex;flex-direction:column;gap:.25rem;overflow-y:auto}
-.cal-chip{font-size:.72rem;padding:.22rem .4rem;border-radius:.4rem;background:var(--muted);color:var(--foreground);cursor:pointer;border-left:3px solid var(--muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-chip:hover{background:color-mix(in srgb,var(--foreground) 8%,var(--muted))}
+.cal-chip{font-size:.72rem;padding:.22rem .4rem;border-radius:.4rem;background:color-mix(in srgb,var(--cal-accent,var(--muted-foreground)) 16%,var(--card));color:var(--foreground);cursor:pointer;border-left:3px solid var(--cal-accent,var(--muted-foreground));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-chip:hover{background:color-mix(in srgb,var(--cal-accent,var(--muted-foreground)) 30%,var(--card))}
 .cal-chip.dragging{opacity:.5}
-.cal-chip.prio-alta{border-left-color:var(--danger)}
-.cal-chip.prio-media{border-left-color:var(--warning)}
-.cal-chip.prio-baja{border-left-color:var(--info)}
-.cal-chip.over .cal-chip-title{color:var(--danger)}
+.cal-chip.prio-alta{--cal-accent:var(--danger)}
+.cal-chip.prio-media{--cal-accent:var(--warning)}
+.cal-chip.prio-baja{--cal-accent:var(--info)}
+.cal-chip.over .cal-chip-title{color:var(--danger);font-weight:600}
 .cal-nodate{background:var(--card);border:1px solid var(--border);border-radius:.6rem;padding:.5rem .7rem}
 .cal-nodate-head{font-size:.78rem;font-weight:600;color:var(--muted-foreground);margin-bottom:.4rem}
 .cal-nodate-items{display:flex;flex-wrap:wrap;gap:.4rem}
@@ -274,9 +274,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .mm > ul{padding-left:0}
 .mm li{position:relative;display:flex;align-items:center;list-style:none;padding:.35rem 0}
 /* conector horizontal hacia el padre */
-.mm ul ul li::before{content:"";position:absolute;left:-2.4rem;top:50%;width:2.4rem;height:2px;background:var(--border)}
+.mm ul ul li::before{content:"";position:absolute;left:-2.4rem;top:50%;width:2.4rem;height:2px;background:color-mix(in srgb,var(--brand-teal) 32%,var(--border))}
 /* bus vertical entre hermanos */
-.mm ul ul li::after{content:"";position:absolute;left:-2.4rem;top:0;height:100%;width:2px;background:var(--border)}
+.mm ul ul li::after{content:"";position:absolute;left:-2.4rem;top:0;height:100%;width:2px;background:color-mix(in srgb,var(--brand-teal) 32%,var(--border))}
 .mm ul ul li:first-child::after{top:50%}
 .mm ul ul li:last-child::after{height:50%}
 .mm ul ul li:only-child::after{display:none}
@@ -284,6 +284,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .mm-box.root{background:var(--primary);color:var(--primary-foreground);border-color:transparent;font-weight:700;max-width:18rem}
 .mm-box.root .mm-text{overflow:hidden;text-overflow:ellipsis}
 .mm-text{font-size:.8rem;font-weight:500;cursor:text}
+.mm-toggle{cursor:pointer;font-size:.68rem;font-weight:700;color:var(--foreground);background:color-mix(in srgb,var(--mm-accent,var(--muted-foreground)) 22%,transparent);padding:.05rem .35rem;border-radius:.4rem;flex:0 0 auto;user-select:none;line-height:1.3}
+.mm-toggle:hover{background:color-mix(in srgb,var(--mm-accent,var(--muted-foreground)) 38%,transparent)}
+.mm-box.collapsed{border-style:dashed}
+/* color por nivel de rama (tokens del proyecto) */
+.mm-box.mm-lvl1{--mm-accent:var(--brand-teal)}
+.mm-box.mm-lvl2{--mm-accent:var(--info)}
+.mm-box.mm-lvl3{--mm-accent:var(--success)}
+.mm-box.mm-lvl4{--mm-accent:var(--warning)}
+.mm-box.mm-lvl5{--mm-accent:var(--brand-blue)}
+.mm-box[class*="mm-lvl"]{border-left:3px solid var(--mm-accent);background:color-mix(in srgb,var(--mm-accent) 9%,var(--card))}
+.mm-box[class*="mm-lvl"] .mm-text{color:var(--foreground)}
 .mm-box .mm-acts{display:flex;gap:.05rem;opacity:0;transition:opacity .12s}
 .mm-box:hover .mm-acts,.mm-box:focus-within .mm-acts{opacity:1}
 .mm-box.root .mm-acts .ap-mini-btn{color:var(--primary-foreground)}
@@ -2154,28 +2165,35 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     var ul = el("ul");
     var rootLi = el("li");
     rootLi.appendChild(mindBox({id:"__root__", text: mindTask.title, children: mindTask.mind}, true, null));
-    if(mindTask.mind.length) rootLi.appendChild(buildChildrenUl(mindTask.mind));
+    if(mindTask.mind.length) rootLi.appendChild(buildChildrenUl(mindTask.mind, 1));
     ul.appendChild(rootLi);
     canvas.appendChild(ul);
   }
-  function buildChildrenUl(children){
+  function buildChildrenUl(children, depth){
     var ul = el("ul");
     children.forEach(function(node){
       var li = el("li");
-      li.appendChild(mindBox(node, false, children));
-      if(node.children && node.children.length) li.appendChild(buildChildrenUl(node.children));
+      li.appendChild(mindBox(node, false, children, depth));
+      if(node.children && node.children.length && !node.collapsed) li.appendChild(buildChildrenUl(node.children, depth+1));
       ul.appendChild(li);
     });
     return ul;
   }
-  function mindBox(node, isRoot, siblings){
-    var box = el("div","mm-box"+(isRoot?" root":""));
+  function mindBox(node, isRoot, siblings, depth){
+    var box = el("div","mm-box"+(isRoot?" root":" mm-lvl"+((((depth||1)-1)%5)+1)));
     box.draggable = !isRoot && node.id!==mindEditId;
     box.addEventListener("dragstart", function(ev){ if(isRoot || node.id===mindEditId) return; ev.stopPropagation(); mindDrag = {node:node, from:siblings}; box.classList.add("mm-dragging"); ev.dataTransfer.effectAllowed="move"; try{ ev.dataTransfer.setData("text/plain", node.id); }catch(e){} });
     box.addEventListener("dragend", function(){ mindDrag=null; clearMindDropMarks(); box.classList.remove("mm-dragging"); });
     box.addEventListener("dragover", function(ev){ if(!mindDrag) return; ev.preventDefault(); markMindDrop(box, mindZone(ev, box, isRoot)); });
     box.addEventListener("dragleave", function(){ box.classList.remove("mm-dz-before","mm-dz-after","mm-dz-child"); });
     box.addEventListener("drop", function(ev){ if(!mindDrag) return; ev.preventDefault(); doMindDrop(node, siblings, isRoot, mindZone(ev, box, isRoot)); });
+    if(!isRoot && node.children && node.children.length){
+      if(node.collapsed) box.classList.add("collapsed");
+      var tog = el("span","mm-toggle", node.collapsed ? ("▸ "+countMind(node.children)) : "▾");
+      tog.title = node.collapsed ? "Expandir rama" : "Colapsar rama";
+      tog.addEventListener("click", function(e){ e.stopPropagation(); node.collapsed = !node.collapsed; saveTasks(); renderMind(); });
+      box.appendChild(tog);
+    }
     if(node.id === mindEditId && !isRoot){
       var inp = document.createElement("input"); inp.className="mm-input"; inp.value=node.text; inp.maxLength=120;
       var done = false;
@@ -2199,6 +2217,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
           e.preventDefault(); e.stopPropagation(); if(done) return; done = true;
           var vt = inp.value.trim(); if(vt) node.text = vt;
           if(!node.children) node.children = [];
+          node.collapsed = false;
           var ch = { id: uid("m_"), text:"", children: [] }; node.children.push(ch);
           mindEditId = ch.id; saveTasks(); renderMind();
         } else if(e.key==="Escape"){
@@ -2248,6 +2267,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   }
   function addMindChild(node){
     if(!node.children) node.children = [];
+    node.collapsed = false;  // expandir para ver el nuevo sub-ítem
     var n = { id: uid("m_"), text: "", children: [] };
     node.children.push(n);
     mindEditId = n.id;
