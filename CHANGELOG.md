@@ -8,6 +8,10 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ## [No publicado]
 
+_(Próximos cambios van acá.)_
+
+## [1.1.0] - 2026-06-14
+
 ### Agregado
 
 - **Vista Calendario.** Tercera vista del tablero (junto a Tarjetas e Ítems) que ubica las
@@ -68,5 +72,6 @@ doble clic y funciona offline; los datos viven en el `localStorage` del navegado
   placeholder); si confirmás un nodo vacío con Enter o al perder el foco, se descarta y no
   queda basura.
 
-[No publicado]: https://github.com/rama77/mindboard/compare/v1.0.0...HEAD
+[No publicado]: https://github.com/rama77/mindboard/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/rama77/mindboard/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/rama77/mindboard/releases/tag/v1.0.0
