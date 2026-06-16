@@ -184,13 +184,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .ap-card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:.7rem .75rem;cursor:grab;position:relative;display:flex;flex-direction:column;gap:.4rem;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .ap-card:active{cursor:grabbing}
 .ap-card.dragging{opacity:.4}
-.ap-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
-.ap-card-title{font-size:.875rem;font-weight:600;line-height:1.3;word-break:break-word}
+.ap-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.4rem .5rem;flex-wrap:wrap}
+.ap-card-title{font-size:.875rem;font-weight:600;line-height:1.3;overflow-wrap:break-word;flex:1 1 8rem;min-width:0}
 .ap-card-desc{font-size:.78rem;color:var(--muted-foreground);line-height:1.35;word-break:break-word;white-space:pre-wrap}
 .ap-card-foot{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-top:.1rem}
 .ap-card-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:600;color:var(--info);text-decoration:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ap-card-link:hover{text-decoration:underline}
-.ap-card-actions{display:flex;gap:.2rem;opacity:.55;transition:opacity .12s}
+.ap-card-actions{display:flex;gap:.2rem;opacity:.55;transition:opacity .12s;flex:0 0 auto;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
 .ap-card:hover .ap-card-actions,.ap-card:focus-within .ap-card-actions{opacity:1}
 .ap-mini-btn{display:inline-flex;align-items:center;justify-content:center;padding:.25rem;border-radius:.5rem;border:0;background:transparent;color:var(--muted-foreground);cursor:pointer}
 .ap-mini-btn:hover{background:var(--muted);color:var(--foreground)}
@@ -378,6 +378,37 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sn-btn:hover{color:var(--foreground)}
 .sn-btn.active{background:var(--card);color:var(--foreground);box-shadow:0 1px 2px rgba(0,0,0,.08);cursor:default}
 .sn-btn svg{width:13px;height:13px}
+/* Planilla de cálculo */
+#overlaySheet .ap-modal{width:92vw;max-width:72rem;height:88vh;max-height:88vh}
+.ss-tools{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.ss-tools .sep{width:1px;height:1.4rem;background:var(--border);margin:0 .2rem}
+.ss-tools .ap-btn{padding:.35rem .55rem;font-size:.8rem;line-height:1}
+.ss-tools .ap-btn.active{background:var(--brand-teal);color:#fff}
+.ss-formula{display:flex;align-items:center;gap:.4rem;flex:1 1 16rem;min-width:12rem}
+.ss-cellref{font-weight:800;font-size:.74rem;color:var(--muted-foreground);min-width:2.4rem;text-align:center;background:var(--muted);padding:.35rem .35rem;border-radius:.45rem}
+.ss-formula input{flex:1;padding:.42rem .55rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card);color:var(--foreground);font-size:.85rem;font-family:inherit}
+.ss-formula input:focus{outline:none;border-color:var(--brand-teal)}
+.ss-colors{display:inline-flex;gap:.3rem;align-items:center}
+.ss-colors .ap-swatch{width:1.4rem;height:1.4rem;border-radius:.4rem}
+.ss-wrap{flex:1;overflow:auto;border:1px solid var(--border);border-radius:.8rem;position:relative}
+.ss-table{border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:.84rem}
+.ss-table th,.ss-table td{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:0}
+.ss-table th{background:var(--muted);color:var(--muted-foreground);font-weight:700;font-size:.72rem;text-align:center;position:sticky;user-select:none;padding:.25rem .3rem}
+.ss-table thead th{top:0;z-index:2;min-width:5.5rem}
+.ss-table tbody th{left:0;z-index:1;min-width:2.4rem}
+.ss-table thead th:first-child{left:0;top:0;z-index:3;min-width:2.4rem}
+.ss-cell{min-width:5.5rem;max-width:16rem;height:1.7rem;line-height:1.7rem;padding:0 .4rem;cursor:cell;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--foreground)}
+.ss-cell.sel{outline:2px solid var(--brand-teal);outline-offset:-2px;border-radius:1px}
+.ss-cell.inrange{background:color-mix(in srgb,var(--brand-teal) 14%,transparent)}
+.ss-cell.ss-point{outline:2px dashed var(--brand-teal);outline-offset:-2px;background:color-mix(in srgb,var(--brand-teal) 18%,transparent)}
+.ss-cell.err{color:var(--danger);font-style:italic;text-align:center}
+.ss-cell.bold{font-weight:800}
+.ss-cell.al-c{text-align:center}
+.ss-cell.al-r{text-align:right}
+.ss-cell.al-l{text-align:left}
+.ss-editor{width:100%;height:1.7rem;border:0;outline:0;margin:0;padding:0 .4rem;font-size:.84rem;font-family:inherit;background:var(--card);color:var(--foreground);box-shadow:inset 0 0 0 2px var(--brand-teal)}
+.ss-statusbar{display:flex;gap:1.2rem;font-size:.78rem;color:var(--muted-foreground);padding:.15rem .2rem 0;min-height:1.1rem;flex-wrap:wrap}
+.ss-statusbar strong{color:var(--foreground)}
 .recents-bar{display:none;align-items:center;gap:.4rem;overflow-x:auto;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
 .recent-chip{display:inline-flex;align-items:center;gap:.2rem;padding:.22rem .2rem .22rem .6rem;background:var(--muted);border-radius:999px;flex:0 0 auto}
 .recent-chip.active{background:color-mix(in srgb,var(--brand-teal) 18%,transparent);box-shadow:inset 0 0 0 1px var(--brand-teal)}
@@ -707,6 +738,45 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   </div>
 </div>
 
+<!-- Modal planilla de cálculo -->
+<div class="ap-overlay" id="overlaySheet">
+  <div class="ap-modal" role="dialog" aria-modal="true">
+    <div class="recents-bar" id="recentsSheet"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <h3 style="display:flex;align-items:center;gap:.5rem">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+          Planilla
+        </h3>
+        <div id="snSlotSheet"></div>
+      </div>
+      <button class="ap-icon-btn" id="btnSheetExport" title="Descargar como Excel (.xlsx) para continuarlo o compartirlo" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
+      <button class="ap-icon-btn" id="btnSheetClose" title="Cerrar" style="padding:.45rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="ss-tools">
+      <div class="ss-formula">
+        <span class="ss-cellref" id="ssCellRef">A1</span>
+        <input id="ssFormula" type="text" autocomplete="off" spellcheck="false" placeholder="Valor o fórmula:  =A1+B2  ·  =SUMA(A1:A5)  ·  =PROMEDIO(B1:B9)">
+      </div>
+      <span class="sep"></span>
+      <button class="ap-btn ghost" id="ssBold" title="Negrita" style="font-weight:800;min-width:2rem">B</button>
+      <button class="ap-btn ghost" id="ssAlignL" title="Alinear a la izquierda"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg></button>
+      <button class="ap-btn ghost" id="ssAlignC" title="Centrar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M5 18h14"/></svg></button>
+      <button class="ap-btn ghost" id="ssAlignR" title="Alinear a la derecha"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M10 12h10M7 18h13"/></svg></button>
+      <span class="sep"></span>
+      <span class="ss-colors" id="ssColors"></span>
+      <span class="sep"></span>
+      <button class="ap-btn ghost" id="ssAddRow" title="Agregar una fila al final">+ Fila</button>
+      <button class="ap-btn ghost" id="ssAddCol" title="Agregar una columna al final">+ Columna</button>
+    </div>
+    <p class="ap-subtitle" style="margin:0">Click para seleccionar · doble click o empezá a escribir para editar · <strong>=</strong> abre una fórmula · <strong>pegá desde Excel</strong> y se arma sola.</p>
+    <div class="ss-wrap" id="ssWrap"><table class="ss-table" id="ssTable"></table></div>
+    <div class="ss-statusbar" id="ssStatus"></div>
+  </div>
+</div>
+
 <!-- Modal guardar borrador -->
 <div class="ap-overlay" id="overlaySaveScratch">
   <div class="ap-modal" role="dialog" aria-modal="true" style="max-width:24rem">
@@ -983,6 +1053,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     plus:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
     map:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.2 11l6.6-4M8.2 13l6.6 4"/></svg>',
     wb:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="6" rx="1"/><rect x="14" y="14" width="7" height="6" rx="1"/><path d="M10 7h3a2 2 0 0 1 2 2v5"/></svg>',
+    sheet:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>',
     userplus:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>',
     star:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.6.7-4.9 4.5 1.4 6.5L12 17.3 6 20.5l1.4-6.5L2.5 9.5l6.6-.7z"/></svg>',
     clock:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
@@ -1435,6 +1506,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     }
     actions.appendChild(miniBtn("Agregar ítem al checklist", SVG.checkadd, function(){ chkAddId = (chkAddId===t.id ? null : t.id); if(chkAddId===t.id){ delete cardCollapsed[t.id]; delete chkCollapsed[t.id]; } render(); }));
     actions.appendChild(miniBtn("Pizarra", SVG.wb, function(){ openWB(t); }));
+    actions.appendChild(miniBtn("Planilla de cálculo", SVG.sheet, function(){ openSheet(t); }));
     actions.appendChild(miniBtn("Mapa mental", SVG.map, function(){ openMind(t); }));
     actions.appendChild(miniBtn("Editar", SVG.edit, function(){ openModal(t); }));
     var d = miniBtn("Eliminar", SVG.trash, function(){ removeTask(t.id); }); d.classList.add("danger");
@@ -1475,6 +1547,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       wbb.innerHTML = SVG.wb; wbb.appendChild(document.createTextNode(String(wc)));
       wbb.title = wc+" elemento(s) en la pizarra";
       foot.appendChild(wbb);
+    }
+    var sc = countSheet(t.sheet);
+    if(sc){
+      var sbb = el("span","ap-mind-badge");
+      sbb.innerHTML = SVG.sheet; sbb.appendChild(document.createTextNode(String(sc)));
+      sbb.title = sc+" celda(s) con datos en la planilla";
+      foot.appendChild(sbb);
     }
 
     if(showBoardTag){
@@ -1728,7 +1807,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     var slot = $(slotId); if(!slot) return;
     slot.innerHTML = "";
     if(!task || !task.id) return;
-    var defs = [{k:"edit",label:"Editar",svg:SVG.edit},{k:"mind",label:"Mapa",svg:SVG.map},{k:"wb",label:"Pizarra",svg:SVG.wb},{k:"checklist",label:"Ítems",svg:SVG.checkadd}];
+    var defs = [{k:"edit",label:"Editar",svg:SVG.edit},{k:"mind",label:"Mapa",svg:SVG.map},{k:"wb",label:"Pizarra",svg:SVG.wb},{k:"sheet",label:"Planilla",svg:SVG.sheet},{k:"checklist",label:"Ítems",svg:SVG.checkadd}];
     var nav = el("div","ap-section-nav");
     defs.forEach(function(d){
       var b = el("button","sn-btn"+(d.k===active?" active":"")); b.type="button"; b.title=d.label;
@@ -1748,6 +1827,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       task = mindTask; closeMind();
     } else if($("overlayWB").classList.contains("open")){
       task = wbTask; closeWB();
+    } else if($("overlaySheet").classList.contains("open")){
+      task = sheetTask; closeSheet();
     } else if($("overlayChecklist").classList.contains("open")){
       task = chkModalTask; closeChecklistModal();
     }
@@ -1755,6 +1836,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     if(target==="edit") openModal(task);
     else if(target==="mind") openMind(task);
     else if(target==="wb") openWB(task);
+    else if(target==="sheet") openSheet(task);
     else if(target==="checklist") openChecklistModal(task);
   }
   function openChecklistModal(task){
@@ -1814,6 +1896,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   function openTaskInSection(t, section){
     if(section==="mind") openMind(t);
     else if(section==="wb") openWB(t);
+    else if(section==="sheet") openSheet(t);
     else if(section==="checklist") openChecklistModal(t);
     else openModal(t);
   }
@@ -1930,6 +2013,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     if(which==="edit"){ var id=$("fId").value; var t=id?tasks.find(function(x){ return x.id===id; }):null; closeScratchAware(t, closeModal); }
     else if(which==="mind"){ closeScratchAware(mindTask, closeMind); }
     else if(which==="wb"){ closeScratchAware(wbTask, closeWB); }
+    else if(which==="sheet"){ closeScratchAware(sheetTask, closeSheet); }
     else if(which==="checklist"){ closeScratchAware(chkModalTask, closeChecklistModal); }
   }
   async function finishScratch(task, rawClose){
@@ -2621,6 +2705,506 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     setWBHint(); renderWB();
   }
 
+  // ---- Planilla de cálculo ----
+  var sheetTask = null;
+  var ssActive = null;    // {r,c} celda activa
+  var ssAnchor = null;    // ancla de la selección de rango
+  var ssRange = null;     // {r1,c1,r2,c2} normalizado
+  var ssEditing = false;
+  var ssDragSel = false;
+  var ssEditor = null;       // <input> de edición en curso
+  var ssPoint = null;        // celda apuntada en "point mode" {r,c}
+  var ssPointSpan = null;    // tramo {start,end} de la referencia tentativa en el editor
+  var ssPointAnchor = null;  // ancla de rango al apuntar con el mouse {r,c}
+  var SS_MAXCOLS = 26, SS_MAXROWS = 200;
+  // Rellenos: token semántico (respeta dark mode) + hex aproximado para el .xlsx
+  var SS_FILLS = [
+    {k:"",       label:"Sin relleno", css:"var(--card)",            hex:null},
+    {k:"teal",   label:"Verde agua",  css:"var(--brand-teal)",      hex:"CFF6F4"},
+    {k:"sky",    label:"Celeste",     css:"var(--brand-sky)",       hex:"E3F3FC"},
+    {k:"yellow", label:"Amarillo",    css:"var(--warning)",         hex:"FCEFC7"},
+    {k:"green",  label:"Verde",       css:"var(--success)",         hex:"D6F0DC"},
+    {k:"red",    label:"Rojo",        css:"var(--danger)",          hex:"FAD9D9"},
+    {k:"blue",   label:"Azul",        css:"var(--brand-blue)",      hex:"D5DAF0"},
+    {k:"grey",   label:"Gris",        css:"var(--muted-foreground)",hex:"E4E4E7"}
+  ];
+  function ssFill(k){ for(var i=0;i<SS_FILLS.length;i++) if(SS_FILLS[i].k===k) return SS_FILLS[i]; return SS_FILLS[0]; }
+
+  function ssColName(i){ var s=""; i=i+1; while(i>0){ var m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26); } return s; }
+  function ssColIndex(name){ var n=0; for(var i=0;i<name.length;i++) n=n*26+(name.charCodeAt(i)-64); return n-1; }
+  function ssRef(r,c){ return ssColName(c)+(r+1); }
+  function ssParseRef(ref){ var m=/^([A-Za-z]+)(\d+)$/.exec(String(ref).trim()); if(!m) return null; return {c:ssColIndex(m[1].toUpperCase()), r:parseInt(m[2],10)-1}; }
+
+  function ssData(){
+    if(!sheetTask.sheet || typeof sheetTask.sheet!=="object") sheetTask.sheet = {cols:6, rows:12, cells:{}};
+    var s = sheetTask.sheet;
+    if(!s.cells || typeof s.cells!=="object") s.cells = {};
+    if(!s.cols) s.cols = 6;
+    if(!s.rows) s.rows = 12;
+    return s;
+  }
+  function ssCell(ref){ return ssData().cells[ref] || null; }
+  function ssRaw(ref){ var c=ssData().cells[ref]; return (c && c.v!=null) ? String(c.v) : ""; }
+  function ssHasFmt(cell){ return !!(cell && (cell.b || cell.al || cell.bg)); }
+  function countSheet(sheet){
+    if(!sheet || !sheet.cells) return 0;
+    var n=0; for(var k in sheet.cells){ var c=sheet.cells[k]; if(c && c.v!=null && String(c.v).trim()!=="") n++; }
+    return n;
+  }
+  function ssNum(raw){
+    if(typeof raw==="number") return isFinite(raw)?raw:null;
+    var t = String(raw).trim();
+    if(t==="") return null;
+    if(t.indexOf(",")>=0 && t.indexOf(".")<0) t = t.replace(",","."); // coma decimal
+    return /^-?\d+(\.\d+)?$/.test(t) ? parseFloat(t) : null;
+  }
+  function ssFmtNum(v){
+    if(!isFinite(v)) return "#NUM";
+    return String(Math.round(v*1e10)/1e10);
+  }
+
+  // Motor de cálculo: cachea por celda y detecta ciclos. Devuelve {valAt}.
+  function ssCompute(){
+    var s = ssData(), cache = {}, visiting = {};
+    function mkErr(code){ var e=new Error(code); e.ssError=code||"#ERROR"; return e; }
+    function valAt(ref){
+      if(cache[ref]!==undefined) return cache[ref];
+      if(visiting[ref]) return (cache[ref] = {e:"#CICLO"});
+      var raw = ssRaw(ref), out;
+      if(raw.charAt(0)==="="){
+        visiting[ref]=true;
+        try{ out = {v: evalExpr(raw.slice(1), ref)}; }
+        catch(err){ out = {e: err.ssError || "#ERROR"}; }
+        visiting[ref]=false;
+      } else {
+        var n = ssNum(raw);
+        out = (n!=null) ? {v:n} : {v:raw};
+      }
+      cache[ref]=out; return out;
+    }
+    function numAt(ref){
+      var res = valAt(ref);
+      if(res.e) throw mkErr(res.e);
+      if(res.v===""||res.v==null) return 0;
+      if(typeof res.v==="number") return res.v;
+      var n = ssNum(res.v); if(n==null) throw mkErr("#VALOR");
+      return n;
+    }
+    function rangeNums(aRef,bRef){
+      var a=ssParseRef(aRef), b=ssParseRef(bRef);
+      if(!a||!b) throw mkErr("#REF");
+      var r1=Math.min(a.r,b.r), r2=Math.max(a.r,b.r), c1=Math.min(a.c,b.c), c2=Math.max(a.c,b.c), out=[];
+      for(var r=r1;r<=r2;r++) for(var c=c1;c<=c2;c++){
+        var res=valAt(ssRef(r,c));
+        if(res.e) throw mkErr(res.e);
+        if(res.v===""||res.v==null) continue;
+        if(typeof res.v==="number"){ out.push(res.v); continue; }
+        var nn=ssNum(res.v); if(nn!=null) out.push(nn); // texto: se ignora, como en Excel
+      }
+      return out;
+    }
+    function evalExpr(src, selfRef){
+      var i=0, n=src.length;
+      function err(code){ return mkErr(code); }
+      function ws(){ while(i<n && /\s/.test(src.charAt(i))) i++; }
+      function parseExpr(){
+        var v=parseTerm(); ws();
+        while(i<n){ var ch=src.charAt(i); if(ch==="+"||ch==="-"){ i++; var r=parseTerm(); v = ch==="+"?v+r:v-r; ws(); } else break; }
+        return v;
+      }
+      function parseTerm(){
+        var v=parseFactor(); ws();
+        while(i<n){ var ch=src.charAt(i); if(ch==="*"||ch==="/"){ i++; var r=parseFactor(); if(ch==="*") v=v*r; else { if(r===0) throw err("#DIV/0"); v=v/r; } ws(); } else break; }
+        return v;
+      }
+      function parseFactor(){
+        ws(); var ch=src.charAt(i);
+        if(ch==="+"){ i++; return parseFactor(); }
+        if(ch==="-"){ i++; return -parseFactor(); }
+        if(ch==="("){ i++; var v=parseExpr(); ws(); if(src.charAt(i)!==")") throw err(); i++; return v; }
+        if(/[0-9.]/.test(ch)) return parseNumber();
+        if(/[A-Za-z_]/.test(ch)) return parseIdent();
+        throw err();
+      }
+      function parseNumber(){ var st=i; while(i<n && /[0-9.]/.test(src.charAt(i))) i++; var v=parseFloat(src.slice(st,i)); if(isNaN(v)) throw err(); return v; }
+      function parseArg(){
+        ws();
+        var m=/^([A-Za-z]+\d+)\s*:\s*([A-Za-z]+\d+)/.exec(src.slice(i));
+        if(m){ i+=m[0].length; return {range:rangeNums(m[1].toUpperCase(), m[2].toUpperCase())}; }
+        return {num:parseExpr()};
+      }
+      function parseIdent(){
+        var st=i; while(i<n && /[A-Za-z0-9_]/.test(src.charAt(i))) i++;
+        var name=src.slice(st,i); ws();
+        if(src.charAt(i)==="("){
+          i++; var args=[]; ws();
+          if(src.charAt(i)!==")"){ do { args.push(parseArg()); ws(); } while(src.charAt(i)==="," && (i++, true)); }
+          ws(); if(src.charAt(i)!==")") throw err(); i++;
+          return callFunc(name.toUpperCase(), args);
+        }
+        if(!/^[A-Za-z]+\d+$/.test(name)) throw err("#NOMBRE");
+        var ref=name.toUpperCase();
+        if(ref===selfRef) throw err("#CICLO");
+        return numAt(ref);
+      }
+      function callFunc(name, args){
+        var nums=[]; args.forEach(function(a){ if(a.range) nums=nums.concat(a.range); else nums.push(a.num); });
+        function sum(){ return nums.reduce(function(s,x){return s+x;},0); }
+        switch(name){
+          case "SUM": case "SUMA": return sum();
+          case "AVERAGE": case "PROMEDIO": if(!nums.length) throw err("#DIV/0"); return sum()/nums.length;
+          case "MIN": return nums.length?Math.min.apply(null,nums):0;
+          case "MAX": return nums.length?Math.max.apply(null,nums):0;
+          case "COUNT": case "CONTAR": return nums.length;
+          case "ABS": return Math.abs(nums[0]||0);
+          case "ROUND": case "REDONDEAR": var d=(args[1]&&args[1].num)||0, f=Math.pow(10,d); return Math.round((nums[0]||0)*f)/f;
+          default: throw err("#NOMBRE");
+        }
+      }
+      var result=parseExpr(); ws();
+      if(i<n) throw err();
+      return result;
+    }
+    return { valAt: valAt };
+  }
+
+  function ssCellEl(r,c){ return $("ssTable").querySelector('.ss-cell[data-r="'+r+'"][data-c="'+c+'"]'); }
+  function ssNormRange(a,b){ return {r1:Math.min(a.r,b.r), c1:Math.min(a.c,b.c), r2:Math.max(a.r,b.r), c2:Math.max(a.c,b.c)}; }
+  function ssInRange(r,c){ if(!ssRange) return false; if(ssRange.r1===ssRange.r2 && ssRange.c1===ssRange.c2) return false; return r>=ssRange.r1 && r<=ssRange.r2 && c>=ssRange.c1 && c<=ssRange.c2; }
+  function ssSelect(r,c,extend){
+    var s=ssData();
+    r=Math.max(0,Math.min(r, s.rows-1)); c=Math.max(0,Math.min(c, s.cols-1));
+    if(extend && ssAnchor){ ssActive={r:r,c:c}; ssRange=ssNormRange(ssAnchor,{r:r,c:c}); }
+    else { ssActive={r:r,c:c}; ssAnchor={r:r,c:c}; ssRange={r1:r,c1:c,r2:r,c2:c}; }
+  }
+  function eachInRange(fn){ if(!ssRange) return; for(var r=ssRange.r1;r<=ssRange.r2;r++) for(var c=ssRange.c1;c<=ssRange.c2;c++) fn(ssRef(r,c)); }
+
+  function renderSheet(){
+    var s=ssData(), engine=ssCompute(), tbl=$("ssTable");
+    tbl.innerHTML="";
+    var thead=el("thead"), htr=el("tr");
+    htr.appendChild(el("th"));
+    for(var c=0;c<s.cols;c++) htr.appendChild(el("th",null,ssColName(c)));
+    thead.appendChild(htr); tbl.appendChild(thead);
+    var tbody=el("tbody");
+    for(var r=0;r<s.rows;r++){
+      var tr=el("tr");
+      tr.appendChild(el("th",null,String(r+1)));
+      for(var c2=0;c2<s.cols;c2++){
+        var ref=ssRef(r,c2), cell=s.cells[ref], raw=ssRaw(ref), res=engine.valAt(ref);
+        var td=el("td"), div=el("div","ss-cell");
+        div.dataset.r=r; div.dataset.c=c2; div.dataset.ref=ref;
+        var isNum=false, txt="";
+        if(raw===""){ txt=""; }
+        else if(res.e){ txt=res.e; div.classList.add("err"); }
+        else if(typeof res.v==="number"){ txt=ssFmtNum(res.v); isNum=true; }
+        else txt=String(res.v);
+        div.textContent=txt;
+        if(cell){
+          if(cell.b) div.classList.add("bold");
+          if(cell.al) div.classList.add("al-"+cell.al); else if(isNum) div.classList.add("al-r");
+          if(cell.bg){ var f=ssFill(cell.bg); if(f.k) div.style.background="color-mix(in srgb,"+f.css+" 30%, var(--card))"; }
+        } else if(isNum) div.classList.add("al-r");
+        if(ssActive && ssActive.r===r && ssActive.c===c2) div.classList.add("sel");
+        else if(ssInRange(r,c2)) div.classList.add("inrange");
+        td.appendChild(div); tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+    tbl.appendChild(tbody);
+    ssUpdateToolbar();
+    ssUpdateStatus(engine);
+  }
+  function ssUpdateToolbar(){
+    if(!ssActive) return;
+    var ref=ssRef(ssActive.r,ssActive.c);
+    $("ssCellRef").textContent=ref;
+    if(!ssEditing) $("ssFormula").value=ssRaw(ref);
+    var cell=ssCell(ref);
+    $("ssBold").classList.toggle("active", !!(cell&&cell.b));
+    $("ssAlignL").classList.toggle("active", !!(cell&&cell.al==="l"));
+    $("ssAlignC").classList.toggle("active", !!(cell&&cell.al==="c"));
+    $("ssAlignR").classList.toggle("active", !!(cell&&cell.al==="r"));
+  }
+  function ssUpdateStatus(engine){
+    var bar=$("ssStatus"); bar.innerHTML="";
+    if(!ssRange) return;
+    var nums=[], cells=(ssRange.r2-ssRange.r1+1)*(ssRange.c2-ssRange.c1+1);
+    for(var r=ssRange.r1;r<=ssRange.r2;r++) for(var c=ssRange.c1;c<=ssRange.c2;c++){
+      var res=engine.valAt(ssRef(r,c));
+      if(res.e) continue;
+      if(typeof res.v==="number") nums.push(res.v);
+      else { var nn=ssNum(res.v); if(nn!=null) nums.push(nn); }
+    }
+    if(cells<=1 && !nums.length) return;
+    function chip(label,val){ var sp=el("span"); sp.innerHTML="<strong>"+label+":</strong> "+val; bar.appendChild(sp); }
+    if(nums.length){ var t=nums.reduce(function(a,b){return a+b;},0); chip("Suma", ssFmtNum(t)); chip("Promedio", ssFmtNum(t/nums.length)); }
+    chip("Cuenta", String(nums.length));
+    if(cells>1) chip("Celdas", String(cells));
+  }
+
+  function ssSetRaw(ref, val){
+    var s=ssData(); val=(val==null)?"":String(val);
+    var cell=s.cells[ref];
+    if(val.trim()===""){ if(cell){ delete cell.v; if(!ssHasFmt(cell)) delete s.cells[ref]; } }
+    else { if(!cell){ cell={}; s.cells[ref]=cell; } cell.v=val; }
+    saveTasks();
+  }
+  function ssIsFormula(v){ return typeof v==="string" && v.charAt(0)==="="; }
+  // Inserta (o reemplaza la tentativa anterior) una referencia en la posición del cursor del editor.
+  function ssInsertRefText(refText){
+    if(!ssEditor) return;
+    var v=ssEditor.value, start, end;
+    if(ssPointSpan){ start=ssPointSpan.start; end=ssPointSpan.end; }
+    else { start=ssEditor.selectionStart; end=ssEditor.selectionEnd; }
+    ssEditor.value = v.slice(0,start)+refText+v.slice(end);
+    var caret=start+refText.length;
+    try{ ssEditor.setSelectionRange(caret, caret); }catch(e){}
+    ssPointSpan={start:start, end:caret};
+  }
+  // Pinta la(s) celda(s) apuntada(s) sin re-renderizar (para no destruir el editor en curso).
+  function ssClearPointPaint(){
+    var tbl=$("ssTable"); if(!tbl) return;
+    var p=tbl.querySelectorAll(".ss-cell.ss-point");
+    for(var i=0;i<p.length;i++) p[i].classList.remove("ss-point");
+  }
+  function ssPaintPoint(r1,c1,r2,c2){
+    ssClearPointPaint();
+    var tbl=$("ssTable"); if(!tbl) return;
+    for(var r=Math.min(r1,r2);r<=Math.max(r1,r2);r++) for(var c=Math.min(c1,c2);c<=Math.max(c1,c2);c++){
+      var elc=ssCellEl(r,c); if(elc) elc.classList.add("ss-point");
+    }
+  }
+  // Mueve la celda apuntada con flechas e inserta su referencia (point mode).
+  function ssPointMove(dr,dc){
+    var s=ssData();
+    if(!ssPoint) ssPoint={r:ssActive.r, c:ssActive.c};
+    ssPoint={ r:Math.max(0,Math.min(s.rows-1, ssPoint.r+dr)), c:Math.max(0,Math.min(s.cols-1, ssPoint.c+dc)) };
+    ssPointAnchor=null;
+    ssInsertRefText(ssRef(ssPoint.r, ssPoint.c));
+    ssPaintPoint(ssPoint.r, ssPoint.c, ssPoint.r, ssPoint.c);
+  }
+  function ssClearPoint(){ ssPoint=null; ssPointSpan=null; ssPointAnchor=null; ssClearPointPaint(); }
+  function ssFinishEdit(val, dr, dc){ ssCommitEdit(val); ssSelect(ssActive.r+dr, ssActive.c+dc, false); renderSheet(); }
+  function ssCancelEdit(){ ssEditing=false; ssEditor=null; ssClearPoint(); renderSheet(); }
+
+  function ssBeginEdit(initial){
+    if(!ssActive) return;
+    var ref=ssRef(ssActive.r,ssActive.c), host=ssCellEl(ssActive.r,ssActive.c);
+    if(!host) return;
+    ssEditing=true; ssClearPoint();
+    var inp=el("input","ss-editor"); inp.type="text";
+    // "+" como primer carácter inicia una fórmula (estilo Excel: +A1 ⇒ =A1).
+    inp.value = (initial==null) ? ssRaw(ref) : (initial==="+" ? "=" : initial);
+    host.textContent=""; host.appendChild(inp);
+    ssEditor=inp;
+    inp.focus();
+    if(initial==null) inp.select();
+    else { var L=inp.value.length; try{ inp.setSelectionRange(L,L); }catch(e){} }
+    inp.addEventListener("input", function(){ ssClearPoint(); }); // edición manual descarta la referencia tentativa
+    inp.addEventListener("keydown", function(e){
+      e.stopPropagation();
+      if(e.key==="Enter"){ e.preventDefault(); ssFinishEdit(inp.value, 1, 0); }
+      else if(e.key==="Tab"){ e.preventDefault(); ssFinishEdit(inp.value, 0, e.shiftKey?-1:1); }
+      else if(e.key==="Escape"){ e.preventDefault(); ssCancelEdit(); }
+      else if(e.key==="ArrowUp"||e.key==="ArrowDown"||e.key==="ArrowLeft"||e.key==="ArrowRight"){
+        var dr = e.key==="ArrowUp"?-1 : e.key==="ArrowDown"?1 : 0;
+        var dc = e.key==="ArrowLeft"?-1 : e.key==="ArrowRight"?1 : 0;
+        e.preventDefault();
+        if(ssIsFormula(inp.value)) ssPointMove(dr,dc);  // arma la fórmula apuntando celdas
+        else ssFinishEdit(inp.value, dr, dc);            // texto plano: confirma y navega
+      }
+    });
+    inp.addEventListener("blur", function(){ if(ssEditing){ ssCommitEdit(inp.value); renderSheet(); } });
+  }
+  function ssCommitEdit(val){ ssEditing=false; ssEditor=null; ssClearPoint(); if(ssActive) ssSetRaw(ssRef(ssActive.r,ssActive.c), val); }
+  function ssClearRange(){ eachInRange(function(ref){ ssSetRaw(ref,""); }); saveTasks(); }
+  function ssApplyFmt(fn){
+    if(!ssRange) return;
+    var s=ssData();
+    eachInRange(function(ref){
+      var cell=s.cells[ref]; if(!cell){ cell={}; s.cells[ref]=cell; }
+      fn(cell);
+      if((cell.v==null||String(cell.v).trim()==="") && !ssHasFmt(cell)) delete s.cells[ref];
+    });
+    saveTasks(); renderSheet();
+  }
+  function ssToggleBold(){
+    var allBold=true; eachInRange(function(ref){ var c=ssCell(ref); if(!(c&&c.b)) allBold=false; });
+    ssApplyFmt(function(cell){ if(allBold) delete cell.b; else cell.b=1; });
+  }
+  function ssSetAlign(al){ ssApplyFmt(function(cell){ if(cell.al===al) delete cell.al; else cell.al=al; }); }
+  function ssSetFill(k){ ssApplyFmt(function(cell){ if(!k) delete cell.bg; else cell.bg=k; }); }
+  function ssAddRow(){ var s=ssData(); if(s.rows<SS_MAXROWS){ s.rows++; saveTasks(); renderSheet(); } else uiAlert("La planilla llegó al máximo de "+SS_MAXROWS+" filas."); }
+  function ssAddCol(){ var s=ssData(); if(s.cols<SS_MAXCOLS){ s.cols++; saveTasks(); renderSheet(); } else uiAlert("La planilla llegó al máximo de "+SS_MAXCOLS+" columnas (A–Z)."); }
+
+  function ssPaste(text){
+    if(!ssActive) return;
+    var rows=text.replace(/\r/g,"").replace(/\n$/,"").split("\n").map(function(line){ return line.split("\t"); });
+    var s=ssData(), baseR=ssActive.r, baseC=ssActive.c;
+    var maxLen=rows.reduce(function(m,x){ return Math.max(m,x.length); },1);
+    if(baseR+rows.length>s.rows) s.rows=Math.min(SS_MAXROWS, baseR+rows.length);
+    if(baseC+maxLen>s.cols) s.cols=Math.min(SS_MAXCOLS, baseC+maxLen);
+    rows.forEach(function(cols,ri){ cols.forEach(function(val,ci){
+      var r=baseR+ri, c=baseC+ci; if(r>=s.rows||c>=s.cols) return;
+      ssSetRaw(ssRef(r,c), val);
+    }); });
+    var endR=Math.min(s.rows-1, baseR+rows.length-1), endC=Math.min(s.cols-1, baseC+maxLen-1);
+    ssAnchor={r:baseR,c:baseC}; ssActive={r:baseR,c:baseC}; ssRange=ssNormRange({r:baseR,c:baseC},{r:endR,c:endC});
+    saveTasks(); renderSheet();
+  }
+
+  function openSheet(task){
+    sheetTask=task;
+    fillSectionNav("snSlotSheet","sheet",task);
+    markRecent("recentsSheet", task, "sheet");
+    ssData();
+    ssActive={r:0,c:0}; ssAnchor={r:0,c:0}; ssRange={r1:0,c1:0,r2:0,c2:0}; ssEditing=false;
+    buildSheetColors();
+    renderSheet();
+    $("overlaySheet").classList.add("open");
+  }
+  function closeSheet(){ ssEditing=false; sheetTask=null; $("overlaySheet").classList.remove("open"); render(); }
+  function buildSheetColors(){
+    var wrap=$("ssColors"); wrap.innerHTML="";
+    SS_FILLS.forEach(function(f){
+      var b=el("button","ap-swatch"); b.type="button"; b.title=f.label;
+      if(!f.k){ b.style.background="var(--card)"; b.style.borderStyle="dashed"; b.style.borderColor="var(--border)"; }
+      else b.style.background="color-mix(in srgb,"+f.css+" 45%, var(--card))";
+      b.addEventListener("click", function(){ ssSetFill(f.k); });
+      wrap.appendChild(b);
+    });
+  }
+  function ssKeydown(e){
+    if(ssEditing) return;
+    var t=(e.target.tagName||"").toLowerCase();
+    if(t==="input" && e.target.id==="ssFormula") return; // la barra de fórmulas maneja sus teclas
+    if(!ssActive) return;
+    if(e.key==="Escape"){ e.preventDefault(); userCloseSection("sheet"); return; }
+    if(e.key==="ArrowUp"){ e.preventDefault(); ssSelect(ssActive.r-1,ssActive.c,e.shiftKey); renderSheet(); return; }
+    if(e.key==="ArrowDown"){ e.preventDefault(); ssSelect(ssActive.r+1,ssActive.c,e.shiftKey); renderSheet(); return; }
+    if(e.key==="ArrowLeft"){ e.preventDefault(); ssSelect(ssActive.r,ssActive.c-1,e.shiftKey); renderSheet(); return; }
+    if(e.key==="ArrowRight"){ e.preventDefault(); ssSelect(ssActive.r,ssActive.c+1,e.shiftKey); renderSheet(); return; }
+    if(e.key==="Tab"){ e.preventDefault(); ssSelect(ssActive.r, ssActive.c+(e.shiftKey?-1:1), false); renderSheet(); return; }
+    if(e.key==="Enter"){ e.preventDefault(); ssBeginEdit(null); return; }
+    if(e.key==="Delete"||e.key==="Backspace"){ e.preventDefault(); ssClearRange(); renderSheet(); return; }
+    if(e.metaKey||e.ctrlKey){
+      if(e.key==="b"||e.key==="B"){ e.preventDefault(); ssToggleBold(); }
+      return;
+    }
+    if(e.key && e.key.length===1 && !e.altKey){ e.preventDefault(); ssBeginEdit(e.key); }
+  }
+
+  // ---- Exportar a Excel (.xlsx) — OOXML armado a mano, sin librerías ----
+  function ssXmlEsc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function ssSheetName(title){
+    var n=String(title||"Hoja1").replace(/[\\\/\?\*\[\]:]/g,"-").slice(0,31).trim();
+    return n||"Hoja1";
+  }
+  function ssFormulaToXlsx(src){
+    var map={SUMA:"SUM", PROMEDIO:"AVERAGE", CONTAR:"COUNT", REDONDEAR:"ROUND"};
+    return src.replace(/[A-Za-z]+(?=\s*\()/g, function(name){ var u=name.toUpperCase(); return map[u]||u; });
+  }
+  function ssStrBytes(str){ return new TextEncoder().encode(str); }
+  function ssCrc32(bytes){
+    var table=ssCrc32.tab;
+    if(!table){ table=ssCrc32.tab=[]; for(var n=0;n<256;n++){ var c=n; for(var k=0;k<8;k++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); table[n]=c>>>0; } }
+    var crc=0xFFFFFFFF;
+    for(var i=0;i<bytes.length;i++) crc=(crc>>>8)^table[(crc^bytes[i])&0xFF];
+    return (crc^0xFFFFFFFF)>>>0;
+  }
+  function ssZip(files){
+    function u16(n){ return [n&0xFF,(n>>8)&0xFF]; }
+    function u32(n){ return [n&0xFF,(n>>8)&0xFF,(n>>16)&0xFF,(n>>>24)&0xFF]; }
+    var chunks=[], central=[], offset=0;
+    files.forEach(function(f){
+      var nameBytes=ssStrBytes(f.name), crc=ssCrc32(f.data), size=f.data.length;
+      var lh=new Uint8Array([].concat(u32(0x04034b50),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(size),u32(size),u16(nameBytes.length),u16(0)));
+      chunks.push(lh, nameBytes, f.data);
+      var ch=new Uint8Array([].concat(u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(size),u32(size),u16(nameBytes.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset)));
+      central.push({head:ch, name:nameBytes});
+      offset += lh.length+nameBytes.length+f.data.length;
+    });
+    var centralStart=offset, centralSize=0, centralChunks=[];
+    central.forEach(function(c){ centralChunks.push(c.head, c.name); centralSize+=c.head.length+c.name.length; });
+    var eocd=new Uint8Array([].concat(u32(0x06054b50),u16(0),u16(0),u16(central.length),u16(central.length),u32(centralSize),u32(centralStart),u16(0)));
+    var all=chunks.concat(centralChunks); all.push(eocd);
+    var total=all.reduce(function(s,a){return s+a.length;},0), out=new Uint8Array(total), p=0;
+    all.forEach(function(a){ out.set(a,p); p+=a.length; });
+    return out;
+  }
+  function ssExportXlsx(){
+    if(!sheetTask) return;
+    var s=ssData(), maxR=0, maxC=0, has=false;
+    for(var k in s.cells){
+      var rc=ssParseRef(k), cell=s.cells[k]; if(!rc) continue;
+      var nonEmpty=(cell.v!=null && String(cell.v).trim()!=="");
+      if(nonEmpty || ssHasFmt(cell)){ has=true; if(rc.r>maxR)maxR=rc.r; if(rc.c>maxC)maxC=rc.c; }
+    }
+    if(!has){ uiAlert("La planilla está vacía. Cargá algún dato antes de descargar."); return; }
+
+    var engine=ssCompute();
+    var fillHex=[], xfs=[{b:0,al:"",fillId:0}], xfMap={"0||":0};
+    function xfIndex(cell){
+      var b=cell.b?1:0, al=cell.al||"", hexObj=cell.bg?ssFill(cell.bg):null, hex=(hexObj&&hexObj.hex)?hexObj.hex:"";
+      var key=b+"|"+al+"|"+hex;
+      if(xfMap[key]!=null) return xfMap[key];
+      var fillId=0;
+      if(hex){ var fi=fillHex.indexOf(hex); if(fi<0){ fillHex.push(hex); fi=fillHex.length-1; } fillId=2+fi; }
+      var idx=xfs.length; xfs.push({b:b,al:al,fillId:fillId}); xfMap[key]=idx; return idx;
+    }
+    var rowsXml="";
+    for(var r=0;r<=maxR;r++){
+      var cellsXml="";
+      for(var c=0;c<=maxC;c++){
+        var ref=ssRef(r,c), cell=s.cells[ref], raw=ssRaw(ref);
+        var sIdx=xfIndex(cell||{}), sAttr=sIdx?(' s="'+sIdx+'"'):"";
+        if(raw===""){ if(sIdx) cellsXml+='<c r="'+ref+'"'+sAttr+'/>'; continue; }
+        if(raw.charAt(0)==="="){
+          var f=ssXmlEsc(ssFormulaToXlsx(raw.slice(1))), res=engine.valAt(ref);
+          if(res.e) cellsXml+='<c r="'+ref+'"'+sAttr+' t="str"><f>'+f+'</f><v>'+ssXmlEsc(res.e)+'</v></c>';
+          else if(typeof res.v==="number") cellsXml+='<c r="'+ref+'"'+sAttr+'><f>'+f+'</f><v>'+res.v+'</v></c>';
+          else cellsXml+='<c r="'+ref+'"'+sAttr+' t="str"><f>'+f+'</f><v>'+ssXmlEsc(res.v)+'</v></c>';
+        } else {
+          var num=ssNum(raw);
+          if(num!=null) cellsXml+='<c r="'+ref+'"'+sAttr+'><v>'+num+'</v></c>';
+          else cellsXml+='<c r="'+ref+'"'+sAttr+' t="inlineStr"><is><t xml:space="preserve">'+ssXmlEsc(raw)+'</t></is></c>';
+        }
+      }
+      if(cellsXml) rowsXml+='<row r="'+(r+1)+'">'+cellsXml+'</row>';
+    }
+    var fillsXml='<fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>';
+    fillHex.forEach(function(h){ fillsXml+='<fill><patternFill patternType="solid"><fgColor rgb="FF'+h+'"/><bgColor indexed="64"/></patternFill></fill>'; });
+    var xfsXml="";
+    xfs.forEach(function(x){
+      var al=x.al==="c"?"center":x.al==="r"?"right":x.al==="l"?"left":"";
+      xfsXml+='<xf numFmtId="0" fontId="'+x.b+'" fillId="'+x.fillId+'" borderId="0" xfId="0"'+(x.b?' applyFont="1"':"")+(x.fillId?' applyFill="1"':"")+(al?' applyAlignment="1"':"")+'>'+(al?'<alignment horizontal="'+al+'"/>':"")+'</xf>';
+    });
+    var XMLHEAD='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+    var contentTypes=XMLHEAD+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>';
+    var rels=XMLHEAD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';
+    var workbook=XMLHEAD+'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="'+ssXmlEsc(ssSheetName(sheetTask.title))+'" sheetId="1" r:id="rId1"/></sheets><calcPr fullCalcOnLoad="1"/></workbook>';
+    var wbRels=XMLHEAD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+    var styles=XMLHEAD+'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="'+(2+fillHex.length)+'">'+fillsXml+'</fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="'+xfs.length+'">'+xfsXml+'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    var sheetXml=XMLHEAD+'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:'+ssRef(maxR,maxC)+'"/><sheetData>'+rowsXml+'</sheetData></worksheet>';
+
+    var files=[
+      {name:"[Content_Types].xml", data:ssStrBytes(contentTypes)},
+      {name:"_rels/.rels", data:ssStrBytes(rels)},
+      {name:"xl/workbook.xml", data:ssStrBytes(workbook)},
+      {name:"xl/_rels/workbook.xml.rels", data:ssStrBytes(wbRels)},
+      {name:"xl/styles.xml", data:ssStrBytes(styles)},
+      {name:"xl/worksheets/sheet1.xml", data:ssStrBytes(sheetXml)}
+    ];
+    try{
+      var bytes=ssZip(files);
+      var blob=new Blob([bytes], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+      var a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+      a.download="planilla-"+slugTitle(sheetTask.title)+".xlsx"; a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
+    }catch(err){ uiAlert("No pude generar el Excel."); }
+  }
+
   // ---- Export / Import ----
   function exportJSON(){
     var payload = { version:2, exportedAt:new Date().toISOString(), boards:boards, columns:columns, people:people, tasks:tasks };
@@ -2811,9 +3395,78 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   $("wbEdit").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); commitWBText(); } else if(e.key==="Escape"){ e.preventDefault(); hideWBEdit(); } });
   $("wbEdit").addEventListener("blur", commitWBText);
 
+  // Planilla de cálculo
+  $("btnSheetClose").addEventListener("click", function(){ userCloseSection("sheet"); });
+  $("btnSheetExport").addEventListener("click", ssExportXlsx);
+  $("overlaySheet").addEventListener("click", function(e){ if(e.target===$("overlaySheet")) userCloseSection("sheet"); });
+  $("ssBold").addEventListener("click", ssToggleBold);
+  $("ssAlignL").addEventListener("click", function(){ ssSetAlign("l"); });
+  $("ssAlignC").addEventListener("click", function(){ ssSetAlign("c"); });
+  $("ssAlignR").addEventListener("click", function(){ ssSetAlign("r"); });
+  $("ssAddRow").addEventListener("click", ssAddRow);
+  $("ssAddCol").addEventListener("click", ssAddCol);
+  $("ssFormula").addEventListener("keydown", function(e){
+    e.stopPropagation();
+    if(e.key==="Enter"){ e.preventDefault(); if(ssActive){ ssSetRaw(ssRef(ssActive.r,ssActive.c), this.value); ssSelect(ssActive.r+1, ssActive.c, false); } renderSheet(); this.blur(); }
+    else if(e.key==="Escape"){ e.preventDefault(); this.value = ssActive?ssRaw(ssRef(ssActive.r,ssActive.c)):""; this.blur(); }
+  });
+  $("ssTable").addEventListener("mousedown", function(e){
+    var cellEl=e.target.closest(".ss-cell"); if(!cellEl) return;
+    var r=+cellEl.dataset.r, c=+cellEl.dataset.c;
+    // Editando una fórmula: clickear una celda inserta su referencia, sin perder el foco del editor.
+    if(ssEditing && ssEditor && ssIsFormula(ssEditor.value)){
+      e.preventDefault();
+      ssPoint={r:r,c:c}; ssPointAnchor={r:r,c:c};
+      ssInsertRefText(ssRef(r,c));
+      ssPaintPoint(r,c,r,c);
+      try{ ssEditor.focus(); }catch(_){}
+      return;
+    }
+    if(ssEditing) return;
+    e.preventDefault();
+    ssSelect(r, c, e.shiftKey);
+    ssDragSel=true; renderSheet();
+  });
+  $("ssTable").addEventListener("mouseover", function(e){
+    var cellEl=e.target.closest(".ss-cell"); if(!cellEl) return;
+    var r=+cellEl.dataset.r, c=+cellEl.dataset.c;
+    // Arrastre apuntando en una fórmula: arma un rango A1:B3.
+    if(ssEditing && ssPointAnchor && ssEditor && ssIsFormula(ssEditor.value)){
+      var a=ssPointAnchor;
+      var ref=(r===a.r && c===a.c) ? ssRef(r,c)
+        : ssRef(Math.min(a.r,r),Math.min(a.c,c))+":"+ssRef(Math.max(a.r,r),Math.max(a.c,c));
+      ssInsertRefText(ref);
+      ssPaintPoint(a.r,a.c,r,c);
+      try{ ssEditor.focus(); }catch(_){}
+      return;
+    }
+    if(!ssDragSel) return;
+    ssSelect(r, c, true); renderSheet();
+  });
+  document.addEventListener("mouseup", function(){ ssDragSel=false; ssPointAnchor=null; });
+  $("ssTable").addEventListener("dblclick", function(e){
+    if(ssEditing) return; // ya estamos editando; el click ya insertó la referencia si era fórmula
+    var cellEl=e.target.closest(".ss-cell"); if(!cellEl) return;
+    ssSelect(+cellEl.dataset.r, +cellEl.dataset.c, false); ssBeginEdit(null);
+  });
+  document.addEventListener("paste", function(e){
+    if(!$("overlaySheet").classList.contains("open") || ssEditing) return;
+    var tag=(e.target.tagName||"").toLowerCase(); if(tag==="input" && e.target.id==="ssFormula") return;
+    var txt=(e.clipboardData||window.clipboardData).getData("text"); if(txt==null||txt==="") return;
+    e.preventDefault(); ssPaste(txt);
+  });
+  document.addEventListener("copy", function(e){
+    if(!$("overlaySheet").classList.contains("open") || ssEditing || !ssRange) return;
+    var tag=(e.target.tagName||"").toLowerCase(); if(tag==="input"||tag==="textarea") return;
+    var lines=[];
+    for(var r=ssRange.r1;r<=ssRange.r2;r++){ var row=[]; for(var c=ssRange.c1;c<=ssRange.c2;c++) row.push(ssRaw(ssRef(r,c))); lines.push(row.join("\t")); }
+    if(e.clipboardData){ e.clipboardData.setData("text/plain", lines.join("\n")); e.preventDefault(); }
+  });
+
   $("btnCollapse").addEventListener("click", function(){ setSidebar(!$("app").classList.contains("collapsed")); });
 
   document.addEventListener("keydown", function(e){
+    if($("overlaySheet").classList.contains("open")){ ssKeydown(e); return; }
     if($("overlayWB").classList.contains("open")){
       var editing = !$("wbEdit").hidden;
       if(e.key==="Escape"){ if(editing) hideWBEdit(); else userCloseSection("wb"); return; }
