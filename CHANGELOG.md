@@ -10,6 +10,22 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ### Agregado
 
+- **Planilla de cálculo en la tarjeta.** Nueva sección de la tarjeta (junto a Editar, Mapa,
+  Pizarra e Ítems) para tener a mano un bloc de cálculos sin salir del tablero:
+  - Grilla simple que arranca en 6×12 y crece con **+ Fila** / **+ Columna** (hasta 26×200).
+  - **Fórmulas básicas**: aritmética entre celdas (`=A1+B2*3`) y funciones sobre rangos
+    `SUMA`/`PROMEDIO`/`MIN`/`MAX`/`CONTAR` (`=SUMA(A1:A10)`); detecta ciclos y división por cero.
+  - **Formato**: negrita, alineación y pintado de celdas con colores semánticos (respeta dark mode).
+  - **Barra de totales** (Suma · Promedio · Cuenta) sobre la selección, y selección por arrastre.
+  - **Pegar desde Excel**: pegás un rango tabulado y se arma sola; **copiar** devuelve TSV.
+  - **Descargar como `.xlsx`** (Excel de verdad, armado a mano sin librerías): conserva valores,
+    fórmulas (traducidas a `SUM`/`AVERAGE`/`COUNT`) y formato, para continuarlo o compartirlo.
+  - La tarjeta muestra un **badge** con la cantidad de celdas con datos.
+  - **Fórmulas estilo planilla ("point mode")**: al editar una fórmula, moverte con las flechas
+    o clickear/arrastrar celdas inserta su referencia (`A1`, rango `A1:B3`); `+` al inicio
+    arranca una fórmula (`+A1` ⇒ `=A1`). Navegación al confirmar: `Enter` baja, `Tab` derecha,
+    **`Shift+Tab` izquierda**, `Escape` descarta.
+
 - **Mapa mental — colapsar ramas.** Cada nodo con hijos muestra un caret para colapsar/
   expandir su rama; colapsado indica cuántos descendientes oculta (**▸ N**). El estado se
   recuerda y agregar un sub-ítem expande la rama automáticamente. Útil para mapas grandes.
