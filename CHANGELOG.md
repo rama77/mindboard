@@ -18,6 +18,10 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
   - **Formato**: negrita, alineación y pintado de celdas con colores semánticos (respeta dark mode).
   - **Barra de totales** (Suma · Promedio · Cuenta) sobre la selección, y selección por arrastre.
   - **Pegar desde Excel**: pegás un rango tabulado y se arma sola; **copiar** devuelve TSV.
+  - **Copiar/pegar adapta las fórmulas**: al copiar una celda (o rango) y pegarla en otra
+    posición de la misma planilla, las referencias relativas se ajustan a la fila/columna
+    nueva (copiar `=A1+B1` y pegar una fila abajo ⇒ `=A2+B2`), como en Excel/Sheets. El
+    pegado desde afuera sigue siendo literal.
   - **Descargar como `.xlsx`** (Excel de verdad, armado a mano sin librerías): conserva valores,
     fórmulas (traducidas a `SUM`/`AVERAGE`/`COUNT`) y formato, para continuarlo o compartirlo.
   - La tarjeta muestra un **badge** con la cantidad de celdas con datos.

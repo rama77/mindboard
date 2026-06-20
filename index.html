@@ -2716,6 +2716,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   var ssPoint = null;        // celda apuntada en "point mode" {r,c}
   var ssPointSpan = null;    // tramo {start,end} de la referencia tentativa en el editor
   var ssPointAnchor = null;  // ancla de rango al apuntar con el mouse {r,c}
+  var ssClipboard = null;    // copia interna {originR, originC, text} para adaptar fórmulas al pegar
   var SS_MAXCOLS = 26, SS_MAXROWS = 200;
   // Rellenos: token semántico (respeta dark mode) + hex aproximado para el .xlsx
   var SS_FILLS = [
@@ -2951,6 +2952,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     saveTasks();
   }
   function ssIsFormula(v){ return typeof v==="string" && v.charAt(0)==="="; }
+  // Adapta las referencias relativas de una fórmula al desplazarla dRow filas / dCol columnas
+  // (como cuando copiás una celda en Excel/Sheets). Un token "letras+dígitos" es siempre una
+  // referencia de celda; los nombres de función (SUMA, PROMEDIO…) no llevan dígitos pegados.
+  function ssShiftFormula(formula, dRow, dCol){
+    if(!ssIsFormula(formula) || (dRow===0 && dCol===0)) return formula;
+    return "=" + formula.slice(1).replace(/([A-Za-z]+)(\d+)/g, function(m, col, row){
+      var p = ssParseRef(col+row); if(!p) return m;
+      var nc = p.c + dCol, nr = p.r + dRow;
+      if(nc<0 || nr<0 || nc>=SS_MAXCOLS || nr>=SS_MAXROWS) return "#REF!";
+      return ssRef(nr, nc);
+    });
+  }
   // Inserta (o reemplaza la tentativa anterior) una referencia en la posición del cursor del editor.
   function ssInsertRefText(refText){
     if(!ssEditor) return;
@@ -3045,8 +3058,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     var maxLen=rows.reduce(function(m,x){ return Math.max(m,x.length); },1);
     if(baseR+rows.length>s.rows) s.rows=Math.min(SS_MAXROWS, baseR+rows.length);
     if(baseC+maxLen>s.cols) s.cols=Math.min(SS_MAXCOLS, baseC+maxLen);
+    // Si el texto pegado salió de una copia interna, adaptamos las referencias relativas
+    // de las fórmulas según cuánto se movió el bloque (origen → celda activa).
+    var internal = ssClipboard && ssClipboard.text===text;
+    var dRow = internal ? (baseR-ssClipboard.originR) : 0, dCol = internal ? (baseC-ssClipboard.originC) : 0;
     rows.forEach(function(cols,ri){ cols.forEach(function(val,ci){
       var r=baseR+ri, c=baseC+ci; if(r>=s.rows||c>=s.cols) return;
+      if(internal && ssIsFormula(val)) val = ssShiftFormula(val, dRow, dCol);
       ssSetRaw(ssRef(r,c), val);
     }); });
     var endR=Math.min(s.rows-1, baseR+rows.length-1), endC=Math.min(s.cols-1, baseC+maxLen-1);
@@ -3460,7 +3478,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     var tag=(e.target.tagName||"").toLowerCase(); if(tag==="input"||tag==="textarea") return;
     var lines=[];
     for(var r=ssRange.r1;r<=ssRange.r2;r++){ var row=[]; for(var c=ssRange.c1;c<=ssRange.c2;c++) row.push(ssRaw(ssRef(r,c))); lines.push(row.join("\t")); }
-    if(e.clipboardData){ e.clipboardData.setData("text/plain", lines.join("\n")); e.preventDefault(); }
+    var text=lines.join("\n");
+    ssClipboard={originR:ssRange.r1, originC:ssRange.c1, text:text};  // recordamos el origen para adaptar fórmulas al pegar
+    if(e.clipboardData){ e.clipboardData.setData("text/plain", text); e.preventDefault(); }
   });
 
   $("btnCollapse").addEventListener("click", function(){ setSidebar(!$("app").classList.contains("collapsed")); });
