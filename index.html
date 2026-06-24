@@ -253,6 +253,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 #overlay.sec-wide .ap-modal > *{width:100%;max-width:38rem;margin-left:auto;margin-right:auto}
 #overlayChecklist .ap-modal{width:92vw;max-width:72rem;height:88vh;max-height:88vh}
 #overlayChecklist .ap-modal > *{width:100%;max-width:40rem;margin-left:auto;margin-right:auto}
+/* Sección a pantalla completa: el modal cubre todo el viewport */
+body.section-fs #overlay.open,body.section-fs #overlayMind.open,body.section-fs #overlayWB.open,body.section-fs #overlaySheet.open,body.section-fs #overlayChecklist.open{padding:0}
+body.section-fs #overlay.open .ap-modal,body.section-fs #overlayMind.open .ap-modal,body.section-fs #overlayWB.open .ap-modal,body.section-fs #overlaySheet.open .ap-modal,body.section-fs #overlayChecklist.open .ap-modal{width:100vw;max-width:100vw;height:100vh;max-height:100vh;border-radius:0;border:0}
+/* maximizar el área de trabajo: ocultamos lo accesorio */
+body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .recents-bar,body.section-fs #overlayWB.open .recents-bar,body.section-fs #overlaySheet.open .recents-bar,body.section-fs #overlayChecklist.open .recents-bar,body.section-fs #overlayMind.open .ap-subtitle,body.section-fs #overlayWB.open .ap-subtitle,body.section-fs #overlaySheet.open .ap-subtitle,body.section-fs #overlayChecklist.open .ap-subtitle{display:none !important}
+.sn-fs{color:var(--muted-foreground)}
+.sn-fs:hover{color:var(--foreground)}
 .chk-items{display:flex;flex-direction:column;gap:.5rem}
 .chk-item{border:1px solid var(--border);border-radius:.7rem;padding:.5rem .6rem;background:var(--card);display:flex;flex-direction:column;gap:.4rem}
 .chk-item.done .chk-item-text{text-decoration:line-through;color:var(--muted-foreground)}
@@ -1054,6 +1061,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     map:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.2 11l6.6-4M8.2 13l6.6 4"/></svg>',
     wb:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="6" rx="1"/><rect x="14" y="14" width="7" height="6" rx="1"/><path d="M10 7h3a2 2 0 0 1 2 2v5"/></svg>',
     sheet:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>',
+    expand:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>',
+    shrink:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M16 3v3a2 2 0 0 0 2 2h3M21 16h-3a2 2 0 0 0-2 2v3M3 16h3a2 2 0 0 1 2 2v3"/></svg>',
     userplus:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>',
     star:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.6.7-4.9 4.5 1.4 6.5L12 17.3 6 20.5l1.4-6.5L2.5 9.5l6.6-.7z"/></svg>',
     clock:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
@@ -1816,6 +1825,26 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       nav.appendChild(b);
     });
     slot.appendChild(nav);
+    var fs = el("button","ap-icon-btn sn-fs"); fs.type="button";
+    fs.style.padding=".35rem"; fs.style.marginLeft=".45rem";
+    fs.addEventListener("click", function(){ toggleSectionFS(); });
+    slot.appendChild(fs);
+    refreshSectionFS();
+  }
+  // Pantalla completa de la sección: el modal ocupa todo el viewport y se oculta lo accesorio
+  // para maximizar el área de trabajo. Se mantiene al cambiar de sección y se sale al volver al tablero.
+  function toggleSectionFS(force){
+    var on = (typeof force==="boolean") ? force : !document.body.classList.contains("section-fs");
+    document.body.classList.toggle("section-fs", on);
+    refreshSectionFS();
+  }
+  function refreshSectionFS(){
+    var on = document.body.classList.contains("section-fs");
+    var btns = document.querySelectorAll(".sn-fs");
+    for(var i=0;i<btns.length;i++){
+      btns[i].innerHTML = on ? SVG.shrink : SVG.expand;
+      btns[i].title = on ? "Salir de pantalla completa" : "Pantalla completa";
+    }
   }
   function switchSection(target){
     var task = null;
@@ -2010,6 +2039,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   }
   function closeScratchAware(task, rawClose){ if(!task || !task.scratch){ rawClose(); return; } finishScratch(task, rawClose); }
   function userCloseSection(which){
+    toggleSectionFS(false);
     if(which==="edit"){ var id=$("fId").value; var t=id?tasks.find(function(x){ return x.id===id; }):null; closeScratchAware(t, closeModal); }
     else if(which==="mind"){ closeScratchAware(mindTask, closeMind); }
     else if(which==="wb"){ closeScratchAware(wbTask, closeWB); }

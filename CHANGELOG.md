@@ -10,6 +10,12 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ### Agregado
 
+- **Secciones a pantalla completa.** Botón de pantalla completa en la barra de secciones de
+  la tarjeta (Editar, Mapa, Pizarra, Planilla, Ítems): el modal pasa a ocupar todo el
+  viewport y se oculta lo accesorio (barra de recientes, ayudas) para **maximizar el área de
+  trabajo**. Se mantiene al cambiar de sección y se sale al volver al tablero (o con el mismo
+  botón).
+
 - **Planilla de cálculo en la tarjeta.** Nueva sección de la tarjeta (junto a Editar, Mapa,
   Pizarra e Ítems) para tener a mano un bloc de cálculos sin salir del tablero:
   - Grilla simple que arranca en 6×12 y crece con **+ Fila** / **+ Columna** (hasta 26×200).
