@@ -8,6 +8,14 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ## [No publicado]
 
+### Corregido
+
+- **Mapa mental — scroll fantasma.** El conector vertical del *primer hijo* de cada rama se
+  extendía un alto completo de su `<li>` (que incluye todo su subárbol), desbordando hacia
+  abajo. En ramas con un primer hijo de subárbol grande esto generaba cientos de píxeles de
+  espacio vacío scrolleable "hacia la nada" y hacía que los nodos parecieran quedar flotando
+  lejos de su padre. Ahora la línea del primer hijo va del centro al borde inferior (`height:50%`).
+
 ### Agregado
 
 - **Secciones a pantalla completa.** Botón de pantalla completa en la barra de secciones de
