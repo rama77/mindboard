@@ -18,6 +18,11 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ### Agregado
 
+- **Mapa mental — descargar como imagen (.png).** Nuevo botón en el modal del mapa que
+  exporta lo que está renderizado (respeta ramas colapsadas) a una imagen. Se arma un SVG a
+  partir de la geometría en vivo (cajas, texto, acentos por nivel y conectores) y se rasteriza
+  sin librerías; queda nítido en pantallas retina.
+
 - **Secciones a pantalla completa.** Botón de pantalla completa en la barra de secciones de
   la tarjeta (Editar, Mapa, Pizarra, Planilla, Ítems): el modal pasa a ocupar todo el
   viewport y se oculta lo accesorio (barra de recientes, ayudas) para **maximizar el área de
