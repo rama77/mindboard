@@ -713,6 +713,8 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
         </h3>
         <div id="snSlotMind"></div>
       </div>
+      <button class="ap-icon-btn" id="btnMindCollapseAll" title="Colapsar todas las ramas" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3l5 5 5-5M7 21l5-5 5 5"/></svg></button>
+      <button class="ap-icon-btn" id="btnMindExpandAll" title="Expandir todas las ramas" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l5-5 5 5M7 16l5 5 5-5"/></svg></button>
       <button class="ap-icon-btn" id="btnMindImage" title="Descargar el mapa como imagen (.png)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
       <button class="ap-icon-btn" id="btnMindExport" title="Compartir el mapa (texto: copiar, WhatsApp o mail)" style="padding:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
       <button class="ap-icon-btn" id="btnMindClose" title="Cerrar" style="padding:.45rem">
@@ -2364,6 +2366,16 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
     ul.appendChild(rootLi);
     canvas.appendChild(ul);
   }
+  // Colapsa (true) o expande (false) todas las ramas con hijos de una sola vez.
+  function setAllMindCollapsed(val){
+    if(!mindTask) return;
+    (function walk(nodes){
+      (nodes||[]).forEach(function(n){
+        if(n.children && n.children.length){ n.collapsed = val; walk(n.children); }
+      });
+    })(mindTask.mind);
+    saveTasks(); renderMind();
+  }
   function buildChildrenUl(children, depth){
     var ul = el("ul");
     children.forEach(function(node){
@@ -3472,6 +3484,8 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
   $("btnWBClose").addEventListener("click", function(){ userCloseSection("wb"); });
   $("btnMindExport").addEventListener("click", exportMindText);
   $("btnMindImage").addEventListener("click", exportMindImage);
+  $("btnMindCollapseAll").addEventListener("click", function(){ setAllMindCollapsed(true); });
+  $("btnMindExpandAll").addEventListener("click", function(){ setAllMindCollapsed(false); });
   $("btnChkExport").addEventListener("click", exportChecklistText);
   $("btnWBExport").addEventListener("click", exportWBImage);
   $("btnScratch").addEventListener("click", createScratch);

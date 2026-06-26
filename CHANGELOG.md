@@ -18,6 +18,10 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ### Agregado
 
+- **Mapa mental — colapsar / expandir todo.** Dos botones en el modal del mapa para colapsar
+  todas las ramas de una vez (quedan visibles solo los nodos de primer nivel, con el conteo
+  de descendientes ocultos) o expandirlas todas. El estado se guarda como hasta ahora.
+
 - **Mapa mental — descargar como imagen (.png).** Nuevo botón en el modal del mapa que
   exporta lo que está renderizado (respeta ramas colapsadas) a una imagen. Se arma un SVG a
   partir de la geometría en vivo (cajas, texto, acentos por nivel y conectores) y se rasteriza
