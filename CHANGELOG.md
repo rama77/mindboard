@@ -18,6 +18,10 @@ arriba, en **No publicado**, y pasan a una versión con fecha cuando se publican
 
 ### Agregado
 
+- **Planilla — valores porcentuales.** Ahora podés escribir `70%` (o `12,5%`) y la celda lo
+  muestra como porcentaje pero lo usa como `0.7` en los cálculos (`=A1*B1`, `=SUMA(...)`, etc.).
+  El formato `%` se conserva al exportar a Excel.
+
 - **Mapa mental — colapsar / expandir todo.** Dos botones en el modal del mapa para colapsar
   todas las ramas de una vez (quedan visibles solo los nodos de primer nivel, con el conteo
   de descendientes ocultos) o expandirlas todas. El estado se guarda como hasta ahora.
