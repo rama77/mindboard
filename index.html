@@ -2875,10 +2875,19 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
     var n=0; for(var k in sheet.cells){ var c=sheet.cells[k]; if(c && c.v!=null && String(c.v).trim()!=="") n++; }
     return n;
   }
+  // Porcentaje: "70%" -> 0.7 (acepta coma decimal). Devuelve null si no es un % literal.
+  function ssPercentNum(raw){
+    var m = /^(-?\d+(?:[.,]\d+)?)\s*%$/.exec(String(raw).trim());
+    if(!m) return null;
+    var n = parseFloat(m[1].replace(",", ".")) / 100;
+    return isFinite(n) ? n : null;
+  }
+  function ssIsPercent(raw){ return typeof raw==="string" && raw.charAt(0)!=="=" && ssPercentNum(raw)!=null; }
   function ssNum(raw){
     if(typeof raw==="number") return isFinite(raw)?raw:null;
     var t = String(raw).trim();
     if(t==="") return null;
+    var p = ssPercentNum(t); if(p!=null) return p;            // 70% -> 0.7
     if(t.indexOf(",")>=0 && t.indexOf(".")<0) t = t.replace(",","."); // coma decimal
     return /^-?\d+(\.\d+)?$/.test(t) ? parseFloat(t) : null;
   }
@@ -2886,6 +2895,7 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
     if(!isFinite(v)) return "#NUM";
     return String(Math.round(v*1e10)/1e10);
   }
+  function ssFmtPercent(v){ return ssFmtNum(v*100) + "%"; }   // 0.7 -> "70%"
 
   // Motor de cálculo: cachea por celda y detecta ciclos. Devuelve {valAt}.
   function ssCompute(){
@@ -3021,7 +3031,7 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
         var isNum=false, txt="";
         if(raw===""){ txt=""; }
         else if(res.e){ txt=res.e; div.classList.add("err"); }
-        else if(typeof res.v==="number"){ txt=ssFmtNum(res.v); isNum=true; }
+        else if(typeof res.v==="number"){ txt=ssIsPercent(raw)?ssFmtPercent(res.v):ssFmtNum(res.v); isNum=true; }
         else txt=String(res.v);
         div.textContent=txt;
         if(cell){
@@ -3285,14 +3295,15 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
     if(!has){ uiAlert("La planilla está vacía. Cargá algún dato antes de descargar."); return; }
 
     var engine=ssCompute();
-    var fillHex=[], xfs=[{b:0,al:"",fillId:0}], xfMap={"0||":0};
+    var fillHex=[], xfs=[{b:0,al:"",fillId:0,fmt:0}], xfMap={"0|||0":0};
     function xfIndex(cell){
       var b=cell.b?1:0, al=cell.al||"", hexObj=cell.bg?ssFill(cell.bg):null, hex=(hexObj&&hexObj.hex)?hexObj.hex:"";
-      var key=b+"|"+al+"|"+hex;
+      var pct=ssIsPercent(cell.v)?1:0;  // numFmt "0.##%" para que Excel lo muestre como %
+      var key=b+"|"+al+"|"+hex+"|"+pct;
       if(xfMap[key]!=null) return xfMap[key];
       var fillId=0;
       if(hex){ var fi=fillHex.indexOf(hex); if(fi<0){ fillHex.push(hex); fi=fillHex.length-1; } fillId=2+fi; }
-      var idx=xfs.length; xfs.push({b:b,al:al,fillId:fillId}); xfMap[key]=idx; return idx;
+      var idx=xfs.length; xfs.push({b:b,al:al,fillId:fillId,fmt:pct?164:0}); xfMap[key]=idx; return idx;
     }
     var rowsXml="";
     for(var r=0;r<=maxR;r++){
@@ -3319,14 +3330,15 @@ body.section-fs #overlay.open .recents-bar,body.section-fs #overlayMind.open .re
     var xfsXml="";
     xfs.forEach(function(x){
       var al=x.al==="c"?"center":x.al==="r"?"right":x.al==="l"?"left":"";
-      xfsXml+='<xf numFmtId="0" fontId="'+x.b+'" fillId="'+x.fillId+'" borderId="0" xfId="0"'+(x.b?' applyFont="1"':"")+(x.fillId?' applyFill="1"':"")+(al?' applyAlignment="1"':"")+'>'+(al?'<alignment horizontal="'+al+'"/>':"")+'</xf>';
+      var fmt=x.fmt||0;
+      xfsXml+='<xf numFmtId="'+fmt+'" fontId="'+x.b+'" fillId="'+x.fillId+'" borderId="0" xfId="0"'+(x.b?' applyFont="1"':"")+(x.fillId?' applyFill="1"':"")+(fmt?' applyNumberFormat="1"':"")+(al?' applyAlignment="1"':"")+'>'+(al?'<alignment horizontal="'+al+'"/>':"")+'</xf>';
     });
     var XMLHEAD='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
     var contentTypes=XMLHEAD+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>';
     var rels=XMLHEAD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';
     var workbook=XMLHEAD+'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="'+ssXmlEsc(ssSheetName(sheetTask.title))+'" sheetId="1" r:id="rId1"/></sheets><calcPr fullCalcOnLoad="1"/></workbook>';
     var wbRels=XMLHEAD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
-    var styles=XMLHEAD+'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="'+(2+fillHex.length)+'">'+fillsXml+'</fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="'+xfs.length+'">'+xfsXml+'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    var styles=XMLHEAD+'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="0.##%"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="'+(2+fillHex.length)+'">'+fillsXml+'</fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="'+xfs.length+'">'+xfsXml+'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
     var sheetXml=XMLHEAD+'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:'+ssRef(maxR,maxC)+'"/><sheetData>'+rowsXml+'</sheetData></worksheet>';
 
     var files=[
